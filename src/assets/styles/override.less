@@ -1,0 +1,24 @@
+// 修改变量
+// 由于 CSS 变量继承机制的原因，两者的修改方式有一定差异：
+
+// 基础变量只能通过 root 选择器 修改，不能通过 ConfigProvider 组件 修改。
+// 组件变量可以通过 root 选择器 和 ConfigProvider 组件 修改。
+
+:root {
+  --van-primary-color: @primary;
+  // 按钮
+  --van-button-primary-background-color: @primary-dark;
+  --van-button-primary-border-color: @primary-dark;
+  --van-button-default-height: 40px;
+  --van-button-border-radius: 10px;
+  --van-button-border-radius: 10px;
+  --van-table-font-size: 12px;
+  --van-empty-description-margin-top: 12px;
+  --van-empty-description-line-height: 20px;
+  --van-empty-description-font-size: 16px;
+  --van-empty-description-color: #333;
+}
+
+.van-button {
+  font-weight: 500;
+}

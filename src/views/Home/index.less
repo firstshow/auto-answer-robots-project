@@ -1,0 +1,35 @@
+.x-home-page-box {
+    padding: 0 16px;
+    .x-table-box {
+        width: 100%;
+        margin-top: 18px;
+        background-color: @theme-back-color;
+        border-radius: 4px;
+        .x-table-header {
+            padding: 16px;
+        }
+        .x-action-btn {
+            margin-right: 8px;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+        .x-start-status {
+            margin-left: 4px;
+            &.-no-start {
+                color: @robot-no-start-status;
+            }
+            &.-starting {
+                color: @robot-starting-status;
+            }
+            &.-wait-start {
+                color: @robot-wait-status;
+            }
+            &.-error {
+                color: @robot-error-status;
+            }
+        }
+    }
+
+}
+

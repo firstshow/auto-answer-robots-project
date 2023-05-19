@@ -1,0 +1,42 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": [
+    "env.d.ts", 
+    "src/**/*", 
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "types/**/*.ts",
+    "./components.d.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "target": "es2016",
+    "lib": ["DOM", "ESNext"],
+    "strict": false,
+    "esModuleInterop": true,
+    "incremental": false,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "vite/client",
+      "unplugin-vue-define-options/macros-global"
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "exclude": ["dist", "node_modules"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}
