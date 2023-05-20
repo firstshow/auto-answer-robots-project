@@ -1,4 +1,4 @@
-import { Button, Table, Badge, Form, Input, Textarea, List, Row, Col } from 'ant-design-vue';
+import { Button, Table, Badge, Form, Input, Textarea, List, Row, Col, Popconfirm } from 'ant-design-vue';
 
 function useComponent(app: any) {
     app
@@ -11,6 +11,7 @@ function useComponent(app: any) {
     .use(List)
     .use(Row)
     .use(Col)
+    .use(Popconfirm)
 }
 
 export default useComponent

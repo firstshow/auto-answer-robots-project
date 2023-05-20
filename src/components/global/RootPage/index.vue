@@ -1,5 +1,5 @@
 <template>
-  <div class="root-page" :class="{ 'auto-height': autoHeight }">
+  <div class="root-page">
     <slot />
   </div>
 </template>
@@ -17,10 +17,6 @@
 </script>
 <style lang="less">
   .root-page {
-    &.auto-height {
-      height: auto;
-      min-height: 100vh;
-      -webkit-overflow-scrolling: touch;
-    }
+    min-height: 600px;
   }
 </style>

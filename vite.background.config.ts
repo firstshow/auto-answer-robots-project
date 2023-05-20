@@ -18,13 +18,12 @@ export default defineConfig({
     outDir: r('dist/background'),
     rollupOptions: {
       input: {
-        contentScript: r('src/background/index.ts'),
+        index: r('src/background/index.ts'),
       },
       output: {
-        assetFileNames: '[name].[ext]',
-        entryFileNames: 'index.js',
-        extend: true,
-        format: 'iife'
+        entryFileNames:"[name].js",
+        format: "iife",
+        inlineDynamicImports: false
       },
     },
   }

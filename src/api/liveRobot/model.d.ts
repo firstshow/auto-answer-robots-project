@@ -30,9 +30,10 @@ declare namespace API {
   }
  
    /**
-   * @type 登录接口入参 
+   * @type 新增机器人接口入参 
    */
    type AddRobotParams = {
+    id?: string // 机器人id
     name: string // 机器人名称
     storeName: string // 店铺名称
     storeAddress: string // 店铺地址
@@ -43,5 +44,77 @@ declare namespace API {
     keywordList: KeywordList[] // 关键词列表
     note: string // 备注
   }
+
+  /**
+   * @type 获取机器人列表接口入参
+   */
+  type GetRobotListParams = {
+    pageNo: number // 页码
+    pageSize: number // 每页条数
+  }
+
+  /**
+   * @type 获取机器人列表接口出参
+   */
+  type GetRobotListRes = {
+    countId: number
+    current: number
+    hitCount: boolean
+    maxLimit: number
+    optimizeCountSql: boolean
+    orders: any[]
+    pages: number
+    records: RobotList[]
+    searchCount: number
+    size: number
+    total: number
+  }
+
+  type RobotList = {
+    id: string // id
+    roomId: string // 直播间id
+    createTime: string // 创建时间
+    updateTime: string // 更新时间
+    name: string // 机器人名称
+    storeName: string // 店铺名称
+    status: number // 机器人状态
+    statusText: string // 机器人状态文案
+  }
+
+  /**
+   * @type 启动或重启机器人接口入参
+   */
+  type StartOrRestartRobotParams = {
+    id: string // 机器人id
+    cookie: string // 抖音登录cookie
+  }
+
+  /**
+   * @type 暂停机器人接口入参
+   */
+  type StopRobotParams = {
+    id: string // 机器人id
+  }
+
+  /**
+   * @type 获取机器人详情接口入参
+   */
+   type GetRobotDetailParams = {
+    id: string // 机器人id
+   }
+  /**
+     * @type 删除机器人详情接口入参
+     */
+  type DeleteRobotParams = {
+    id: string // 机器人id
+  }
+
+   /**
+    * @type 获取机器人详情接口出参
+    */
+   type GetRobotDetailRes = AddRobotParams & {
+    createTime: string // 创建时间
+    updateTime: string // 更新时间
+   }
 }
 

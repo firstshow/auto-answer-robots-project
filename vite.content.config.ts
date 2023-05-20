@@ -18,13 +18,12 @@ export default defineConfig({
     outDir: r('dist/contentScript'),
     rollupOptions: {
       input: {
-        contentScript: r('src/contentScripts/index.ts'),
+        index: r('src/contentScripts/index.ts')
       },
       output: {
-        assetFileNames: '[name].[ext]',
-        entryFileNames: 'index.js',
-        extend: true,
-        format: 'iife'
+        entryFileNames:"[name].js",
+        format: "esm",
+        inlineDynamicImports: false
       },
     },
   }

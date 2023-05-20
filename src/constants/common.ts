@@ -65,3 +65,12 @@ export const CURRENT_EVN = {
   dev: 'dev',
   prod: 'prod'
 }
+
+/**
+ * @constant 机器人状态
+ */
+export const ROBOT_STATUS_VAL = {
+  waitUse: 'waitUse',  // 未启动
+  inUse: 'inUse', // 启动中
+  exception: 'exception' // 异常
+}

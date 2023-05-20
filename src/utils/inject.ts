@@ -1,8 +1,6 @@
-console.log('background js')
-import { setSessionStorage } from './../hooks/storage'
-
+import { setSessionStorage } from '@/hooks'
+import { getQuery } from '@/utils/common'
 let hasCookie = false
-
 document.addEventListener('DOMContentLoaded', function() {
   // @ts-ignore
   chrome.webRequest.onSendHeaders.addListener((details) => {
@@ -10,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
       if (hasCookie) {
         return {cancel: false}
       }
+      // 获取请求链接的参数
+      let query: any = getQuery(details.url)
 
       // 拦截https://eos.douyin.com/data/life/live/comment/im_list的接口的header，因为里面有cookie
       if (details.url.indexOf('https://eos.douyin.com/data/life/live/comment/im_list') > -1) {    
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < details.requestHeaders.length; i++) {
           if (details.requestHeaders[i].name.toLowerCase() === 'cookie') {
             setSessionStorage('cookie', details.requestHeaders[i].value)
+            setSessionStorage('roomId', query.room_id)
             console.log('拦截到的cookies：', details.requestHeaders[i])
             hasCookie = true
             break

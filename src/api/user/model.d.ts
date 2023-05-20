@@ -16,7 +16,6 @@ declare namespace API {
    type LoginParams = {
     phone: string // 手机号
     code: string // 授权码
-    ticket: string // 抖音的cookie
     scenario: string // 场景
   }
 

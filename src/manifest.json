@@ -1,9 +1,9 @@
 {
   "name": "自动回复机器人",
   "version": "0.0.1",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "author": "eleven",
-  "description": "TinssonTai的插件模板",
+  "description": "自动回复机器人",
   "action": {
     "default_popup": "index.html",
     "default_icon": "./resources/logo.png"
@@ -15,40 +15,17 @@
     "128": "./resources/logo.png"
   },
   "browser_action": {
-    "default_icon": {
-      "16": "images/icon.png",
-      "24": "images/icon.png",
-      "32": "images/icon.png"
-    },
     "default_title": "自动评论机器人",
     "default_popup": "index.html/#/login"
   },
-  "page_action": {
-    "default_icon": "image/icon.png",
-    "default_title": "My Test",
-    "default_popup": "index.html/#/login"
-  },
   "permissions": [
+    "cookies",
+    "tabs",
     "http://*/*",
     "https://*/*",
-    "tabs"
-  ],
-  "host_permissions": [
-    "http://*/*",
-    "https://*/*"
-  ],
-  "background": {
-    "service_worker": "/background/index.js"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "/contentScript/index.js"
-      ],
-      "run_at": "document_end"
-    }
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "contextMenus"
   ]
 }
