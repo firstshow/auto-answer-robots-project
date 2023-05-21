@@ -1,7 +1,7 @@
 <template>
   <header class="x-header-box flex items-center justify-between">
-    <div class="x-back-btn cursor-pointer" @click="back">
-      <svg-icon name="IconBack" size="20"/>
+    <div class="x-back-btn cursor-pointer">
+      <svg-icon name="IconBack" size="20" v-if="hasBack" @click="back"/>
     </div>
     <div class="flex items-center">
       <svg-icon name="IconLogo" size="32" />
@@ -14,6 +14,12 @@
   import { routeGoBack} from '@/hooks'
   defineOptions({
     name: 'XHeader'
+  })
+  defineProps({
+    hasBack: {
+      type: Boolean,
+      default: true
+    }
   })
   /**
    * @function back 返回上一页

@@ -21,8 +21,7 @@
   "permissions": [
     "cookies",
     "tabs",
-    "http://*/*",
-    "https://*/*",
+    "https://eos.douyin.com/*",
     "webRequest",
     "webRequestBlocking",
     "storage",

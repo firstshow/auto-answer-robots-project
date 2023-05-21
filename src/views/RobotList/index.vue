@@ -1,16 +1,27 @@
 <template>
   <root-page class="x-home-page-box flex flex-col items-center">
-    <x-header/>
+    <x-header :hasBack="false"/>
     <div class="x-table-box">
       <div class="x-table-header flex items-center justify-between">
-        <span>小助手列表</span>
+        <div class="flex items-center">
+          <span style="margin-right: 6px;">小助手列表</span>
+          <svg-icon class="cursor-pointer" name="IconRefresh" size="14" @click="refresh"/>
+        </div>
         <a-button type="primary" @click="createRobot">创建</a-button>
       </div>
-      <a-table class="x-table-body" :columns="columns" :data-source="data.robotList" :scroll="{ x: 1000 }">
+      <a-table 
+        class="x-table-body" 
+        :columns="columns" 
+        :loading="data.isLoading" 
+        :data-source="data.robotList" 
+        :scroll="{ x: 1200 }"
+        :pagination="false"
+        emptyText="暂无小助手"
+        >
         <template #headerCell="{ column }">
           <template v-if="column.key === 'name'">
             <span>
-             姓名
+             助手名称
             </span>
           </template>
         </template>
@@ -32,7 +43,15 @@
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
-              <a class="x-action-btn" @click="handleRobot(record.status, record.id)">{{ ROBOT_STATUS[record.status].btnText }}</a>
+              <a-popconfirm
+                :title="getTipContent(record.status, record.id, record.name, record.roomId)"
+                ok-text="确定"
+                cancel-text="取消"
+                @confirm="handleRobot(record.status, record.id)"
+              >
+              <a class="x-action-btn">{{ ROBOT_STATUS[record.status].btnText }}</a>
+              </a-popconfirm>
+              <!-- <a class="x-action-btn" @click="handleRobot(record.status, record.id, record.name, record.roomId)">{{ ROBOT_STATUS[record.status].btnText }}</a> -->
               <a-divider type="vertical"/>
               <a class="x-action-btn" @click="editRobot(record.id)">修改</a>
               <a-divider type="vertical" />
@@ -68,10 +87,16 @@ import { getSessionStorage } from '@/hooks'
 
   const columns = [
   {
-    name: '姓名',
+    name: '助手名称',
     dataIndex: 'name',
     key: 'name',
     width: 80
+  },
+  {
+    title: '直播抖音昵称',
+    dataIndex: 'anchorName',
+    key: 'anchorName',
+    width: 120
   },
   {
     title: '直播间ID',
@@ -142,6 +167,7 @@ const ROBOT_STATUS = {
   }
 
   const data = reactive({
+    isLoading: false,
     reqData: {
       pageNo: 1,
       pageSize: 100
@@ -166,16 +192,35 @@ const createRobot = () => {
 }
 
 /**
+ * @function refresh 刷新小助手列表
+ * @param status 机器人状态
+ * @param id 机器人id
+ */
+const refresh = async () => {
+  console.log('refresh')
+  await getRobotList()
+  message.success(`刷新成功`)
+}
+
+/**
  * @function 获取机器人列表
  */
 const getRobotList = async () => {
   console.log('getRobotList')
-  let resData = await getRobotListServer({
-    pageNo: data.reqData.pageNo,
-    pageSize: data.reqData.pageSize
-  })
-  data.robotList = resData.result.records
-  console.log('获取的数据：', data.robotList)
+  if (data.isLoading) return
+  data.isLoading = true
+  try {
+    let resData = await getRobotListServer({
+      pageNo: data.reqData.pageNo,
+      pageSize: data.reqData.pageSize
+    })
+    data.robotList = resData.result.records
+    data.isLoading = false
+  } catch (error) {
+    data.isLoading = false
+    message.error(`获取列表数据失败：${error.message}`)
+    console.log('获取列表数据失败：', error)
+  }
 }
 
 /**
@@ -183,7 +228,6 @@ const getRobotList = async () => {
  * @param id 机器人id
  */
 const editRobot = (id: string) => {
-  console.log('editRobot', id)
   routeChange('createRobot', {
     id
   })
@@ -195,31 +239,57 @@ const editRobot = (id: string) => {
  * @function startRobot 启动机器人
  */
  const startOrRestartRobot = async (id: string) => {
-  console.log('startRobot')
-  let resData = await startOrRestartRobotServer({
-    id,
-    cookie: getSessionStorage('cookie')
-  })
-  getRobotList()
-  console.log('获取的数据：', resData)
+  try {
+    await startOrRestartRobotServer({
+      id,
+      cookie: getSessionStorage('cookie')
+    })
+    getRobotList()
+    message.success('启动成功')
+  } catch (error) {
+    message.error(`'启动失败：${error.message}`)
+  }
 }
 
 /**
- * @function stopRobot 启动机器人
+ * @function stopRobot 停止机器人
  */
  const stopRobot = async (id: string) => {
   console.log('stopRobot')
-  let resData = await stopRobotServer({
-    id
-  })
-  getRobotList()
-  console.log('获取的数据：', resData)
+  try {
+    await stopRobotServer({
+      id
+    })
+    getRobotList()
+    message.success('暂停成功')
+  } catch (error) {
+    message.error(`'暂停失败：${error.message}`)
+  }
 }
 /**
- * @function 操作机器人
+ * @function 操作时的提示判断
+ * @param status 机器人状态 
+ * @param id  机器人id
+ * @param name  机器人名称
+ * @param roomId  机器人直播间id
  */
- const handleRobot = async (status: string, id: string) => {
-  console.log('机器人状态', status)
+const getTipContent = (status: string, id: string, name: string, roomId: string) => {
+  const currentRoomId = getSessionStorage('roomId')
+  let tipContent = `确定${ROBOT_STATUS[status].btnText}小助手【${name}】吗？`
+  if (currentRoomId !== roomId && [ROBOT_STATUS_VAL.waitUse, ROBOT_STATUS_VAL.exception].includes(status)) {
+    tipContent =  `即将服务的直播间与上一次服务的直播间不一样，确定切换直播间吗？`
+  } else if (status === ROBOT_STATUS_VAL.inUse) {
+    tipContent =  `小助手【${name}】正在服务中...，确定暂停吗？`
+  }
+  return tipContent
+}
+
+/**
+ * @function handleRobot 操作机器人
+ * @param status  机器人状态 
+ * @param id  机器人id
+ */
+const handleRobot = (status: string, id: string) => {
   switch (status) {
     case ROBOT_STATUS_VAL.waitUse:
     case ROBOT_STATUS_VAL.exception:
@@ -249,7 +319,7 @@ const editRobot = (id: string) => {
       getRobotList()
       message.success('删除成功')
     } catch (error) {
-      message.success(`删除失败，原因是:${error.message}`)
+      message.error(`删除失败，原因是:${error.message}`)
     }
   }
 

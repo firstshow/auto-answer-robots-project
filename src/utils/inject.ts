@@ -1,5 +1,7 @@
 import { setSessionStorage } from '@/hooks'
 import { getQuery } from '@/utils/common'
+// import router from '@/routes'
+
 let hasCookie = false
 document.addEventListener('DOMContentLoaded', function() {
   // @ts-ignore
@@ -30,5 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
     ['requestHeaders', 'extraHeaders']
   )
 })
+
+// // @ts-ignore
+// chrome.runtime.onSuspend.addListener(() => {
+//   setSessionStorage('lastRouteName1', router)
+// })
 
 export {}

@@ -31,7 +31,13 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
-        additionalData: `@import "@/assets/styles/variables.less";`
+        additionalData: `@import "@/assets/styles/variables.less";`,
+        // If you are using less-loader@5 please spread the lessOptions to options directly
+        modifyVars: {
+          // 这里就是样式变量的名称以及对应的值，可以按照上面提供的官方文档进行配置
+          'font-size': '18px'
+        },
+        javascriptEnabled: true
       }
     }
   },

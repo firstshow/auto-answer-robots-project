@@ -72,6 +72,7 @@ declare namespace API {
 
   type RobotList = {
     id: string // id
+    anchorName?: string // 抖音昵称
     roomId: string // 直播间id
     createTime: string // 创建时间
     updateTime: string // 更新时间
