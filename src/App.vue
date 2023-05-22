@@ -5,7 +5,26 @@
 </template>
 
 <script setup lang="ts">
-  
+  // @ts-nocheck
+  import { setSessionStorage } from '@/hooks'
+  import { REQUEST_ACTION, STORAGE_KEY } from '@/constants'
+  import { onMounted } from 'vue'
+
+  const setCookie = () => {
+    chrome.runtime.onMessage.addListener(function(request, sender) {
+      console.log('页面接收到的信息是：', request, sender)
+      if (request.action === REQUEST_ACTION.setCookie) {
+        let cookie = request.cookie
+        setSessionStorage(STORAGE_KEY.cookie, cookie)
+        chrome.runtime.sendMessage({ action: "receivedCookie", cookie: request.cookie })
+      }
+    });
+  }
+
+  // 时机成熟 回调函数自动执行
+  onMounted(() => {
+    setCookie()
+  })
 </script>
 
 <style lang="less" scoped>

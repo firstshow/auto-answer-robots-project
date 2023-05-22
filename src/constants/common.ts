@@ -74,3 +74,20 @@ export const ROBOT_STATUS_VAL = {
   inUse: 'inUse', // 启动中
   exception: 'exception' // 异常
 }
+
+
+/**
+ * @constant 请求拦截的action
+ */
+export const REQUEST_ACTION = {
+  setCookie: 'setCookie',  // 设置cookie
+}
+
+
+/**
+ * @constant 存储缓存的key
+ */
+export const STORAGE_KEY = {
+  cookie: 'cookie',  // 设置cookie
+  userInfo: 'userInfo' // 用户信息
+}

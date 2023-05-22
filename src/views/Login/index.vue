@@ -23,6 +23,7 @@ import { routeReplaceChange } from "@/hooks/routeChange"
 import { loginServer } from '@/api'
 import { validatePhone, validateCode, setLocalStorage } from '@/hooks'
 import { message } from 'ant-design-vue'
+import { STORAGE_KEY } from '@/constants'
 
   const formState = reactive({
     phone: '15968849894',
@@ -45,7 +46,7 @@ import { message } from 'ant-design-vue'
         scenario: 'authCodeLogin' // 固定写死
       })
       // 存储用户信息
-      setLocalStorage('userInfo', resData.result)
+      setLocalStorage(STORAGE_KEY.userInfo, resData.result)
       message.info(`登录成功`)
       routeReplaceChange('robotList')
     } catch (error) {

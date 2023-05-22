@@ -108,7 +108,7 @@ import { addRobotServer, getRobotDetailServer, editRobotServer } from '@/api'
 import { useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
-import { routeGoBack, setLocalStorage } from '@/hooks'
+import { routeGoBack } from '@/hooks'
 
 const router = useRoute();
 const formRef = ref()
@@ -268,7 +268,6 @@ const saveRobot = async () => {
       routeGoBack(-1)
     }, 2000)
   } catch (error) {
-    setLocalStorage(`newRobotInfo-${id}`, reqData)
     message.info(`添加失败，${error.message}`)
   }
 }
