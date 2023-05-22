@@ -9,7 +9,7 @@ let hasSend = false
  */
 export const getCookie = (details) => {
     // 获取当前接口中的header请求头中的cookie信息
-    if (details.url.indexOf('https://eos.douyin.com/data/life/live/user/info/v1/') > -1) {    
+    if (details.url.indexOf('https://eos.douyin.com/data/life/live/comment/im_list/') > -1) {    
         // 循环获取headers中的key，找到cookie，找到后存储到sessionStorage中
         for (let i = 0; i < details.requestHeaders.length; i++) {
             if (details.requestHeaders[i].name.toLowerCase() === 'cookie') {

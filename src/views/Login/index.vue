@@ -26,8 +26,8 @@ import { message } from 'ant-design-vue'
 import { STORAGE_KEY } from '@/constants'
 
   const formState = reactive({
-    phone: '15968849894',
-    code: 'UYVRYDX8'
+    phone: '',
+    code: ''
   })
   
   /**
