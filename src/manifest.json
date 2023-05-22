@@ -21,10 +21,28 @@
   "permissions": [
     "cookies",
     "tabs",
-    "https://eos.douyin.com/*",
+    "https://*/*",
     "webRequest",
     "webRequestBlocking",
     "storage",
     "contextMenus"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "scripts": ["/background/index.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "/contentScript/index.js"
+      ],
+      "run_at": "document_start"
+    }
   ]
 }

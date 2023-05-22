@@ -336,6 +336,20 @@ const handleRobot = (status: string, id: string) => {
 onMounted(() => {
   console.log('ScenePage ~ onMounted')
   getRobotList()
+
+  // @ts-ignore
+  // 监听来自其他扩展程序或 content script 发送的消息
+  chrome.runtime.onMessage.addListener(function(request, sender) {
+    console.log('页面接收到的信息是：', request, sender)
+
+    // if (request.action === "search") {
+    //   var searchUrl = "https://www.baidu.com/search?q=" + encodeURIComponent(request.selection);
+    //   // @ts-ignore
+    //   chrome.runtime.sendMessage({ action: "openTab", url: searchUrl });
+    // }
+    // @ts-ignore
+    chrome.runtime.sendMessage({ action: "receivedCookie", cookie: request.cookie });
+  });
 })
 /******************************** E 生命周期钩子函数业务逻辑 ***********************************/
 </script>
