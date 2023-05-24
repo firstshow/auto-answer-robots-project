@@ -46,7 +46,10 @@ import { STORAGE_KEY } from '@/constants'
         scenario: 'authCodeLogin' // 固定写死
       })
       // 存储用户信息
-      setLocalStorage(STORAGE_KEY.userInfo, resData.result)
+      setLocalStorage(STORAGE_KEY.userInfo, {
+        ...resData.result,
+        phone: formState.phone
+      })
       message.info(`登录成功`)
       routeReplaceChange('robotList')
     } catch (error) {

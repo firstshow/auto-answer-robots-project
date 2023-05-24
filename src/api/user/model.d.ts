@@ -23,6 +23,7 @@ declare namespace API {
    * @type 登录接口出参
    */
   type LoginRes = {
+    phone?: string // 手机号
     isLogin: boolean // 是否登录
     loginDevice: string // 登录设备
     loginId: string // 登录id

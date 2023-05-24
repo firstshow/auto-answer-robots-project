@@ -1,7 +1,7 @@
 {
   "name": "自动回复机器人",
   "version": "0.0.1",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "author": "eleven",
   "description": "自动回复机器人",
   "action": {
@@ -22,8 +22,6 @@
     "cookies",
     "tabs",
     "https://*/*",
-    "webRequest",
-    "webRequestBlocking",
     "storage",
     "contextMenus"
   ],
@@ -32,7 +30,7 @@
     "http://*/*"
   ],
   "background": {
-    "scripts": ["/background/index.js"]
+    "service_worker": "/background/index.js"
   },
   "content_scripts": [
     {

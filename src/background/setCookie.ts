@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { getSessionStorage } from './../hooks/storage'
 import { STORAGE_KEY, REQUEST_ACTION } from './../constants/common'
 
 let hasCookie = false
@@ -20,7 +19,7 @@ export const setCookie = (val: string) => {
 
 chrome.runtime.onMessage.addListener(function(request) {
     if (request.action === REQUEST_ACTION.receivedCookie) {
-        alert(`已经接收到cookie: ${request.cookie}`)
+        console.log(`已经接收到cookie: ${request.cookie}`)
         hasCookie = true
         chrome.runtime.onMessage.removeListener()
     }
