@@ -1,18 +1,26 @@
+// @ts-nocheck
 import { getCookie } from './listenerRequest'
+import { setCookie } from './setCookie'
+import { REQUEST_ACTION, STORAGE_KEY } from './../constants/common'
 
 /** @internal
  * @function 监听请求头，获取cookie等信息
  */
-// @ts-ignore
-chrome.webRequest.onSendHeaders.addListener((details) => {
-  getCookie(details)
+// chrome.webRequest.onSendHeaders.addListener((details) => {
+//   getCookie(details)
   
-  return  {cancel: true};
-},
-{
-  urls: ['*://*.douyin.com/*']
-},
-['requestHeaders', 'extraHeaders']
-)
+//   return  {cancel: true};
+// },
+// {
+//   urls: ['*://*.douyin.com/*']
+// },
+// ['requestHeaders', 'extraHeaders']
+// )
+
+chrome.runtime.onMessage.addListener(function(request) {
+  if (request.action === REQUEST_ACTION.getCookie) {
+    setCookie(request.cookie)
+  }
+})
 
 export {}

@@ -81,6 +81,8 @@ export const ROBOT_STATUS_VAL = {
  */
 export const REQUEST_ACTION = {
   setCookie: 'setCookie',  // 设置cookie
+  getCookie: 'getCookie',  // 设置cookie
+  receivedCookie: 'receivedCookie' // 接收到了cookie
 }
 
 

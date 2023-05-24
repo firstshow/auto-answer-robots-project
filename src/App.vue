@@ -16,7 +16,7 @@
       if (request.action === REQUEST_ACTION.setCookie) {
         let cookie = request.cookie
         setSessionStorage(STORAGE_KEY.cookie, cookie)
-        chrome.runtime.sendMessage({ action: "receivedCookie", cookie: request.cookie })
+        chrome.runtime.sendMessage({ action: REQUEST_ACTION.receivedCookie, cookie })
       }
     });
   }
