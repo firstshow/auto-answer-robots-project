@@ -1,6 +1,5 @@
 // @ts-nocheck
-import { getCookie } from './listenerRequest'
-import { setCookie } from './setCookie'
+// import { getCookie } from './listenerRequest'
 import { REQUEST_ACTION, STORAGE_KEY } from './../constants/common'
 
 /** @internal
@@ -17,10 +16,11 @@ import { REQUEST_ACTION, STORAGE_KEY } from './../constants/common'
 // ['requestHeaders', 'extraHeaders']
 // )
 
-chrome.runtime.onMessage.addListener(function(request) {
-  if (request.action === REQUEST_ACTION.getCookie) {
-    setCookie(request.cookie)
-  }
-})
+// chrome.runtime.onMessage.addListener(function(request) {
+//   if (request.action === REQUEST_ACTION.getCookie) {
+//     console.log('asdadadad')
+//     getCookie()
+//   }
+// })
 
 export {}
