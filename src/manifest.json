@@ -1,7 +1,7 @@
 {
   "name": "自动回复机器人",
   "version": "0.0.1",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "author": "eleven",
   "description": "自动回复机器人",
   "action": {
@@ -20,17 +20,17 @@
   },
   "permissions": [
     "cookies",
+    "https://www.douyin.com/*",
     "tabs",
     "https://*/*",
     "storage"
   ],
   "host_permissions": [
     "https://www.douyin.com/*",
-    "http://*/*"
+    "http://*/*",
+    "<all_urls>",
+    "*://*/*" 
   ],
-  "background": {
-    "scripts": ["/background/index.js"]
-  },
   "content_scripts": [
     {
       "matches": [
