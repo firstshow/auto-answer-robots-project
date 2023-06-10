@@ -15,7 +15,7 @@
 
 <style lang="less" scoped>
 .x-container {
-  width: 800px;
+  width: 780px;
   background-color: #060716;
   color: #fff;
   box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.6);

@@ -1,9 +1,9 @@
 {
-  "name": "自动回复机器人",
+  "name": "小海豚",
   "version": "0.0.1",
   "manifest_version": 3,
   "author": "eleven",
-  "description": "自动回复机器人",
+  "description": "直播助手——小海豚",
   "action": {
     "default_popup": "index.html",
     "default_icon": "./resources/logo.png"
