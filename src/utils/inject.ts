@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
   //   );
   // })
 
-  // V3的写法
+  // V3的写法；获取本地cookies
   chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
     let url = tabs[0].url
     chrome.cookies.getAll({ 

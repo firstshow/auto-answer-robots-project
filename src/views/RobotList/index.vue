@@ -43,18 +43,36 @@
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
+              <!-- S 启动/暂停 -->
               <a-popconfirm
                 :title="getTipContent(record.status, record.id, record.name, record.roomId)"
                 ok-text="确定"
                 cancel-text="取消"
                 @confirm="handleRobot(record.status, record.id)"
               >
-              <a class="x-action-btn">{{ ROBOT_STATUS[record.status].btnText }}</a>
+                <a class="x-action-btn">{{ ROBOT_STATUS[record.status].btnText }}</a>
               </a-popconfirm>
-              <!-- <a class="x-action-btn" @click="handleRobot(record.status, record.id, record.name, record.roomId)">{{ ROBOT_STATUS[record.status].btnText }}</a> -->
               <a-divider type="vertical"/>
+              <!-- E 启动/暂停 -->
+
+              <!-- S 开启讲解常驻 -->
+              <a-popconfirm
+                :title="`确定当前直播间讲解常驻吗`"
+                ok-text="确定"
+                cancel-text="取消"
+                @confirm="handleRobot(record.status, record.id)"
+              >
+                <a class="x-action-btn">开启讲解常驻</a>
+              </a-popconfirm>
+              <a-divider type="vertical"/>
+               <!-- E 开启讲解常驻 -->
+
+              <!-- S 修改 -->
               <a class="x-action-btn" @click="editRobot(record.id)">修改</a>
               <a-divider type="vertical" />
+              <!-- E 修改 -->
+
+              <!-- S 删除 -->
               <a-popconfirm
                 :title="`确定要删除小助手【${record.name}】吗?`"
                 ok-text="确定"
@@ -63,6 +81,7 @@
               >
                 <a class="x-action-btn">删除</a>
               </a-popconfirm>
+              <!-- E 删除 -->
             </span>
           </template>
         </template>
@@ -81,7 +100,7 @@
     deleteRobotServer 
   } from '@/api'
   import { reactive, onMounted } from 'vue'
-  import { ROBOT_STATUS_VAL } from '@/constants'
+  import { ROBOT_STATUS_VAL, ROUTE_MAP } from '@/constants'
   import { message } from 'ant-design-vue'
   import { getSessionStorage } from '@/hooks'
 
@@ -187,8 +206,7 @@ defineProps({
  * @function createRobot 创建机器人
  */
 const createRobot = () => {
-  console.log('createRobot')
-  routeChange('createRobot')
+  routeChange(ROUTE_MAP.CreateRobot)
 }
 
 /**
@@ -228,7 +246,7 @@ const getRobotList = async () => {
  * @param id 机器人id
  */
 const editRobot = (id: string) => {
-  routeChange('createRobot', {
+  routeChange(ROUTE_MAP.CreateRobot, {
     id
   })
 }

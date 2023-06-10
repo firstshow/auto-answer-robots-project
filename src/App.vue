@@ -32,6 +32,9 @@
   :global(.ant-list) {
     font-size: 12px !important;
   }
+  :global(.ant-dropdown-menu-item) {
+    font-size: 12px !important;
+  }
   :global(.ant-table) {
       font-size: 12px !important;
       background-color: transparent !important;

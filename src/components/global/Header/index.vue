@@ -3,18 +3,33 @@
     <div class="x-back-btn cursor-pointer">
       <svg-icon name="IconBack" size="20" v-if="hasBack" @click="back"/>
     </div>
-    <div class="flex items-center">
-      <svg-icon name="IconLogo" size="32" />
-      <span>{{ filterPhone(phone) }}</span>
-    </div>
+    <a-dropdown>
+        <div class="cursor-pointer flex items-center" @click.prevent>
+          <svg-icon name="IconLogo" size="32" />
+          <span>{{ filterPhone(phone) }}</span>
+          <svg-icon class="margin-left-8" name="IconDownArrow" size="12"/>
+        </div>
+        <template #overlay>
+          <a-menu>
+            <a-menu-item>
+              <div class="flex justify-center items-center" @click="logout">
+                <svg-icon name="IconExitLogOut" size="16" />
+                <span class="margin-left-8">退出登录</span>
+              </div>
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
   </header>
 </template>
 
 <script lang="ts" setup>
   import { routeGoBack} from '@/hooks'
-  import { getLocalStorage } from '@/hooks/storage'
+  import { getLocalStorage, removeLocalStorage } from '@/hooks/storage'
   import { STORAGE_KEY } from '@/constants/common'
+  import { routeChange } from "@/hooks/routeChange"
   import { ref, onMounted } from 'vue'
+  import { ROUTE_MAP } from '@/constants'
 
   defineOptions({
     name: 'XHeader'
@@ -43,8 +58,20 @@
     phone.value = userInfo.phone
   }
 
+  /**
+   * @function logout 过滤手机号
+   */
   const filterPhone = (phone: string) => {
     return `${phone.slice(0, 3)}****${phone.slice(-4)}`
+  }
+
+  /**
+   * @function logout 退出登录
+   */
+  const logout = () => {
+    console.log('退出登录')
+    removeLocalStorage(STORAGE_KEY.userInfo)
+    routeChange(ROUTE_MAP.Login)
   }
 
   onMounted(()=>{

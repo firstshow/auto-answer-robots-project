@@ -23,7 +23,7 @@ import { routeReplaceChange } from "@/hooks/routeChange"
 import { loginServer } from '@/api'
 import { validatePhone, validateCode, setLocalStorage } from '@/hooks'
 import { message } from 'ant-design-vue'
-import { STORAGE_KEY } from '@/constants'
+import { STORAGE_KEY, ROUTE_MAP } from '@/constants'
 
   const formState = reactive({
     phone: '',
@@ -51,7 +51,7 @@ import { STORAGE_KEY } from '@/constants'
         phone: formState.phone
       })
       message.info(`登录成功`)
-      routeReplaceChange('robotList')
+      routeReplaceChange(ROUTE_MAP.RobotList)
     } catch (error) {
       message.info(`登录失败，${error.message}`)
       console.log('登录失败', error)
