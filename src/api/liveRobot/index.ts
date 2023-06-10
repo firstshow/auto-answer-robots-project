@@ -85,3 +85,17 @@ export function getRobotDetailServer(data: API.GetRobotDetailParams) {
     noToken: true
   })
 }
+
+/**
+ * @api 启动或重启机器人
+ * @param data 
+ * @returns 
+ */
+export function setRobotAlwaysExplainServer(data: API.SetRobotAlwaysExplainParams) {
+  return request<API.resResult<string>>({
+    url: '/api/ltk/ltkAssistant-api/permanent',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}

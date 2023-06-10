@@ -93,3 +93,11 @@ export const STORAGE_KEY = {
   cookie: 'cookie',  // 设置cookie
   userInfo: 'userInfo' // 用户信息
 }
+
+/**
+ * @constant 存储缓存的key
+ */
+export const ROBOT_ALWAYS_EXPLAIN = {
+  open: 1,  // 设置cookie
+  close: 0 // 用户信息
+}

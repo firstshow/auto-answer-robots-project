@@ -25,7 +25,7 @@
               <a-col :span="4">套餐价格</a-col>
               <a-col :span="11">套餐描述</a-col>
               <a-col class="cursor-pointer" :span="1" :offset="1" @click="addGoods">
-                <svg-icon name="IconAdd" size="20" />
+                <svg-icon name="IconAdd" size="16" />
               </a-col>
             </a-row>
           </template>
@@ -47,7 +47,7 @@
                 </a-form-item-rest>
               </a-col>
               <a-col class="x-list-input-box cursor-pointer" :span="1" :offset="1" @click="reduceGoods(index)">
-                <svg-icon name="IconReduce" size="20" />
+                <svg-icon name="IconReduce" size="16" />
               </a-col>
             </a-row>
           </template>
@@ -64,7 +64,7 @@
               <a-col :span="8">关键词</a-col>
               <a-col :span="14">回复内容</a-col>
               <a-col class="cursor-pointer" :span="1" :offset="1" @click="addKeyword">
-                <svg-icon name="IconAdd" size="20" />
+                <svg-icon name="IconAdd" size="16" />
               </a-col>
             </a-row>
           </template>
@@ -81,7 +81,7 @@
                 </a-form-item-rest>
               </a-col>
               <a-col class="x-list-input-box cursor-pointer" :span="1" :offset="1" @click="reduceKeyword(index)">
-                <svg-icon name="IconReduce" size="20" />
+                <svg-icon name="IconReduce" size="16" />
               </a-col>
             </a-row>
           </template>

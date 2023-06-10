@@ -117,5 +117,13 @@ declare namespace API {
     createTime: string // 创建时间
     updateTime: string // 更新时间
    }
+
+   /**
+    * @type 获取机器人详情接口出参
+    */
+   type SetRobotAlwaysExplainParams = {
+    open: number // 创建时间
+    id: number // 更新时间
+   }
 }
 

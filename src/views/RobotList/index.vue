@@ -57,12 +57,12 @@
 
               <!-- S 开启讲解常驻 -->
               <a-popconfirm
-                :title="`确定当前直播间讲解常驻吗`"
+                :title="`确定${record.permanentOpen === ROBOT_ALWAYS_EXPLAIN.open ? '关闭' : '开启'}当前直播间讲解常驻吗`"
                 ok-text="确定"
                 cancel-text="取消"
-                @confirm="handleRobot(record.status, record.id)"
+                @confirm="setRobotAlwaysExplain(record.permanentOpen, record.id)"
               >
-                <a class="x-action-btn">开启讲解常驻</a>
+                <a class="x-action-btn">{{record.permanentOpen === ROBOT_ALWAYS_EXPLAIN.open ? '关闭' : '开启'}}讲解常驻</a>
               </a-popconfirm>
               <a-divider type="vertical"/>
                <!-- E 开启讲解常驻 -->
@@ -97,10 +97,11 @@
     getRobotListServer, 
     startOrRestartRobotServer, 
     stopRobotServer, 
-    deleteRobotServer 
+    deleteRobotServer,
+    setRobotAlwaysExplainServer
   } from '@/api'
   import { reactive, onMounted } from 'vue'
-  import { ROBOT_STATUS_VAL, ROUTE_MAP } from '@/constants'
+  import { ROBOT_STATUS_VAL, ROUTE_MAP, ROBOT_ALWAYS_EXPLAIN } from '@/constants'
   import { message } from 'ant-design-vue'
   import { getSessionStorage } from '@/hooks'
 
@@ -324,6 +325,21 @@ const handleRobot = (status: string, id: string) => {
   }
 }
 /******************************** E 机器人操作业务逻辑 ***********************************/
+
+/******************************** S 机器人设置讲解常驻业务逻辑 ***********************************/
+const setRobotAlwaysExplain = async (open: number, id: number) => {
+  try {
+    await setRobotAlwaysExplainServer({
+      id,
+      open: open === ROBOT_ALWAYS_EXPLAIN.open ? ROBOT_ALWAYS_EXPLAIN.close : ROBOT_ALWAYS_EXPLAIN.open
+    })
+    getRobotList()
+    message.success('删除成功')
+  } catch (error) {
+    message.error(`删除失败，原因是:${error.message}`)
+  }
+}
+/******************************** E 机器人设置讲解常驻业务逻辑 ***********************************/
 
 /******************************** S 删除机器人的业务逻辑 ***********************************/
   /**
