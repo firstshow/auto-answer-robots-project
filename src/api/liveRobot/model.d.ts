@@ -28,12 +28,28 @@ declare namespace API {
     keyword: string
     reply: string
   }
+
+   /**
+   * @type 检核激活码是否正确入参
+   */
+  type checkCodeParams = {
+    code: string
+  }
+
+   /**
+   * @type 检核激活码是否正确入参
+   */
+   type renewRobotParams = {
+    id: string
+    code: string
+  }
  
    /**
    * @type 新增机器人接口入参 
    */
    type AddRobotParams = {
     id?: string // 机器人id
+    code: string // 机器人激活码
     name: string // 机器人名称
     storeName: string // 店铺名称
     storeAddress: string // 店铺地址

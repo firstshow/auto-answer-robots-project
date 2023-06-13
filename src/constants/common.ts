@@ -72,7 +72,8 @@ export const CURRENT_EVN = {
 export const ROBOT_STATUS_VAL = {
   waitUse: 'waitUse',  // 未启动
   inUse: 'inUse', // 启动中
-  exception: 'exception' // 异常
+  exception: 'exception', // 异常
+  expired: 'expired' // 过期
 }
 
 

@@ -25,6 +25,30 @@ export function addRobotServer(data: API.AddRobotParams) {
 }
 
 /**
+ * @api 新增机器人小助手
+ */
+export function checkCodeServer(data: API.checkCodeParams) {
+  return request<API.resResult<string[]>>({
+    url: '/api/ltk/ltkAssistant-api/checkCode',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+
+/**
+ * @api 续费机器人小助手
+ */
+export function renewRobotServer(data: API.renewRobotParams) {
+  return request<API.resResult<string[]>>({
+    url: '/api/ltk/ltkAssistant-api/renew',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+
+/**
  * @api 修改机器人小助手
  */
 export function editRobotServer(data: API.AddRobotParams) {

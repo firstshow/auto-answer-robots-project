@@ -114,6 +114,7 @@ const router = useRoute();
 const formRef = ref()
 
 let formState = reactive({
+  code: router.query.code, // 激活码
   name: '', // 助手名称
   storeName: '', // 门店名称
   storeAddress: '', // 门店地址
@@ -238,6 +239,7 @@ const saveRobot = async () => {
   // 如果有id，则是编辑；没有id是新增
   let handleRobotFun = !id ? addRobotServer : editRobotServer
   let {
+    code,
     name,
     storeName,
     storeAddress,
@@ -250,6 +252,7 @@ const saveRobot = async () => {
   } = formState
   let reqData = {
       id,
+      code,
       name,
       storeName, // 店铺名称
       storeAddress, // 店铺地址
