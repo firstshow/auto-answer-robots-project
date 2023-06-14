@@ -102,3 +102,10 @@ export const ROBOT_ALWAYS_EXPLAIN = {
   open: 1,  // 设置cookie
   close: 0 // 用户信息
 }
+
+/**
+ * @constant 草稿箱的key
+ */
+export const DRAFT_TYPE = {
+  editRobotDraft: 'editRobotDraft'
+}

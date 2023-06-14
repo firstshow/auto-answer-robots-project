@@ -24,16 +24,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { routeGoBack} from '@/hooks'
   import { getLocalStorage, removeLocalStorage } from '@/hooks/storage'
   import { STORAGE_KEY } from '@/constants/common'
   import { routeReplaceChange } from "@/hooks/routeChange"
   import { ref, onMounted } from 'vue'
   import { ROUTE_MAP } from '@/constants'
 
+
+  const emit = defineEmits(['back'])
+
   defineOptions({
     name: 'XHeader'
   })
+
   defineProps({
     hasBack: {
       type: Boolean,
@@ -47,7 +50,7 @@
    * @function back 返回上一页
    */
   const back = () => {
-    routeGoBack(-1)
+    emit('back')
   }
 
   /**

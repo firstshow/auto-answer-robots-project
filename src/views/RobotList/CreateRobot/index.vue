@@ -1,6 +1,10 @@
 <template>
   <root-page class="x-create-robot-page-box flex flex-col items-center">
-    <x-header />
+    <x-header @back="back" />
+    <p class="x-draft-tips flex items-center justify-left" v-if="draftData.isShowDraftTips">
+      <svg-icon class="cursor-pointer margin-right-6" name="IconClear" size="14" @click="draftData.isShowDraftTips = false"/>
+      您本地有一份存储于{{draftData.setTime}}的一份草稿，是否<span class="x-use-btn" @click="useDraft">使用</span>该草稿? 
+    </p>
     <a-form class="x-from-box" :rules="rules" ref="formRef" :model="formState" @finish="saveRobot">
       <a-form-item label="助手名称" name="name">
         <a-input class="x-from-input" v-model:value="formState.name" placeholder="请输入助手名称" />
@@ -105,13 +109,17 @@
 <script setup lang="ts">
 import XHeader from '@/components/global/Header/index.vue'
 import { addRobotServer, getRobotDetailServer, editRobotServer } from '@/api'
+import { DRAFT_TYPE } from '@/constants'
 import { useRoute } from 'vue-router'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, watch } from 'vue'
 import { message } from 'ant-design-vue'
-import { routeGoBack } from '@/hooks'
+import { routeGoBack, setDraft, getDraft, clearDraft } from '@/hooks'
 
 const router = useRoute();
 const formRef = ref()
+let watchFlag = null // 事件监听对象
+let isChange = false // 是否更改表单数据
+let setDraftTimer = null // 存储草稿定时器
 
 let formState = reactive({
   code: router.query.code, // 激活码
@@ -139,6 +147,15 @@ let formState = reactive({
 } as API.AddRobotParams)
 
 /**
+ * @function draftData 草稿箱数据
+ */
+let draftData = reactive({
+  isShowDraftTips: false,
+  setTime: '',
+  value: {} as API.AddRobotParams
+})
+
+/**
  * @function rules 表单验证规则
  */
 const rules = {
@@ -149,6 +166,55 @@ const rules = {
   businessTime: [{ required: true, message: '请输入营业时间' }],
   packageLimit: [{ required: false, message: '请输入套餐限制' }],
   note: [{ required: false, message: '请输入其他信息' }],
+}
+
+/**
+ * @function 初始化草稿箱；如果本地有存储草稿，则直接提示；没有则没有提示
+ */
+const initDraft = () => {
+  let draft = getDraft(DRAFT_TYPE.editRobotDraft)
+  if (!draft) return
+
+  draftData.value = draft.value
+  draftData.setTime = draft.setTime
+  draftData.isShowDraftTips = true
+  console.log(draftData)
+}
+
+/**
+ * @function setDraftTimerFun 设置草稿定时器
+ */
+const setDraftTimerFun = () => {
+  // 每3秒存储一下表单数据
+  setDraftTimer = setInterval(() => {
+    console.log('存储：', isChange)
+    if (isChange) {
+      setDraft(DRAFT_TYPE.editRobotDraft, formState)
+    }
+  }, 2000)
+}
+
+/**
+ * @function 开始监听
+ */
+const startWatch = () => {
+  watchFlag = watch(formState, (newVal, oldVal) => {
+    console.log('监听：', isChange)
+    isChange = true
+    // 如果修改了表单数据，则不再提示草稿
+    draftData.isShowDraftTips = false
+  }, { deep: true })
+}
+
+/**
+ * @function useDraft 使用草稿箱
+ */
+const useDraft = () => {
+  formState = {
+    ...formState,
+    ...draftData.value
+  }
+  draftData.isShowDraftTips = false
 }
 
 /**
@@ -183,6 +249,7 @@ const getRobotDetail = async () => {
   formState.keywordList = keywordList
   formState.note = note
   console.log(resData)
+  isChange = false
 }
 
 /**
@@ -228,6 +295,9 @@ const reduceKeyword = (idx) => {
  * @function back 返回上一页
  */
 const back = () => {
+  clearInterval(setDraftTimer)
+  // 取消监听表单数据
+  watchFlag()
   routeGoBack(-1)
 }
 
@@ -266,19 +336,25 @@ const saveRobot = async () => {
   try {
     let resData = await handleRobotFun(reqData)
     console.log(resData)
-    message.info(`添加成功`)
+    message.info(`${id ? '修改' : '添加'}成功`)
+    clearInterval(setDraftTimer)
+    clearDraft(DRAFT_TYPE.editRobotDraft)
+    // 取消监听表单数据
+    watchFlag()
     setTimeout(() => {
       routeGoBack(-1)
     }, 2000)
   } catch (error) {
-    message.info(`添加失败，${error.message}`)
+    message.info(`${id ? '修改' : '添加'}失败，${error.message}`)
   }
 }
 
 /******************************** S 生命周期钩子函数业务逻辑 ***********************************/
-onMounted(() => {
-  console.log('ScenePage ~ onMounted',)
-  getRobotDetail()
+onMounted( async () => {
+  initDraft()
+  await getRobotDetail()
+  startWatch()
+  setDraftTimerFun()
 })
 /******************************** E 生命周期钩子函数业务逻辑 ***********************************/
 </script>
