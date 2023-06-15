@@ -123,3 +123,32 @@ export function setRobotAlwaysExplainServer(data: API.SetRobotAlwaysExplainParam
     noToken: true
   })
 }
+
+/**
+ * @api 获取直播间信息
+ * @param data 
+ * @returns 
+ */
+export function getRoomInfoServer(data: API.GetRoomInfoParams) {
+  return request<API.resResult<API.RoomInfoData>>({
+    url: '/api/ltk/ltkAssistant-api/roomInfo',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+
+/**
+ * @api 获取直播间直播数据
+ * @param data 
+ * @returns 
+ */
+export function getRoomDataStatisticsServer(data: API.GetRoomDataStatisticsParams) {
+  return request<API.resResult<API.RoomDataStatisticsData>>({
+    url: '/api/ltk/ltkAssistant-api/keyIndex',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+

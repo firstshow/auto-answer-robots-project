@@ -76,6 +76,11 @@
               <a-divider type="vertical"/>
                <!-- E 开启讲解常驻 -->
 
+               <!-- S 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
+              <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="robotDataStatistics(record.id)">直播数据</a>
+              <a-divider type="vertical" />
+              <!-- E 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
+
               <!-- S 修改 -->
               <a class="x-action-btn" v-if="record.status !== ROBOT_STATUS_VAL.expired" @click="editRobot(record.id)">修改</a>
               <a-divider type="vertical" />
@@ -186,7 +191,7 @@
     title: '操作',
     key: 'action',
     fixed: 'right',
-    width: 120
+    width: 140
   },
 ]
 
@@ -305,6 +310,17 @@ const getRobotList = async () => {
  */
 const editRobot = (id: string) => {
   routeChange(ROUTE_MAP.CreateRobot, {
+    id
+  })
+}
+
+
+/**
+ * @function editRobot 编辑机器人
+ * @param id 机器人id
+ */
+ const robotDataStatistics = (id: string) => {
+  routeChange(ROUTE_MAP.RobotDataStatistics, {
     id
   })
 }
@@ -445,7 +461,7 @@ const setRobotAlwaysExplain = async (open: number, id: number) => {
 
 /******************************** S 删除机器人的业务逻辑 ***********************************/
   /**
-   * @function stopRobot 启动机器人
+   * @function stopRobot 删除机器人
    */
   const deleteRobot = async (id: string) => {
     try {

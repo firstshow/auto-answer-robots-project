@@ -51,5 +51,8 @@
   :global(.ant-table-cell-fix-right) {
       background-color: @theme-back-color !important;
   }
+  :global(.ant-form-item-explain) {
+    font-size: 12px !important;
+  }
 }
 </style>

@@ -36,7 +36,7 @@ export const validatePassword = (rule: any, value: string) => {
     if (!value) {
         return Promise.reject('请输入密码')
     } else if (!REG.password.test(value)) {
-        return Promise.reject('密码必须包含大小写字母、数字、特殊字符，且长度为6-16位')
+        return Promise.reject('密码必须包含大小写字母、数字，且长度为6-16位')
     } else {
         return Promise.resolve()
     }

@@ -30,6 +30,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: ''
     }
+  },
+  {
+    path: '/robotDataStatistics',
+    name: 'robotDataStatistics',
+    component: () => import('@/views/RobotList/RobotDataStatistics/index.vue'),
+    meta: {
+      title: ''
+    }
   }
 ]
 

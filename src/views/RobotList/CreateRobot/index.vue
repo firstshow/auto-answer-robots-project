@@ -200,6 +200,7 @@ const setDraftTimerFun = () => {
 const startWatch = () => {
   watchFlag = watch(formState, (newVal, oldVal) => {
     console.log('监听：', isChange)
+    // 当表单数据改变时，将可变标记做变更，这样就会触发草稿存储
     isChange = true
     // 如果修改了表单数据，则不再提示草稿
     draftData.isShowDraftTips = false

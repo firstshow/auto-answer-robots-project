@@ -1,8 +1,8 @@
 <template>
   <root-page class="x-login-page-box flex flex-col items-center">
     <svg-icon name="IconLogo" size="100" />
-    <a-form class="x-login-form" :rules="rules" :label-col="{ span: 5 }" :model="formState" @finish="login">
-      <a-form-item label="手机号" name="phone">
+    <a-form class="x-login-form" :rules="rules" :label-col="{ span: 6 }" :model="formState" @finish="login">
+      <a-form-item label="手机号" name="username">
         <a-input placeholder="请输入手机号" v-model:value="formState.username" :maxlength="11" />
       </a-form-item>
       <a-form-item label="密&nbsp;&nbsp;&nbsp;码" name="password">
@@ -35,8 +35,8 @@ import { STORAGE_KEY, ROUTE_MAP } from '@/constants'
    * 表单验证规则
    */
   const rules = {
-    username: [{ required: true, validator: validatePhone, message: '请输入手机号'}],
-    password: [{ required: true, validator: validatePassword, message: '请输入密码' }]
+    username: [{ required: true, validator: validatePhone }],
+    password: [{ required: true, validator: validatePassword }]
   }
   
 
