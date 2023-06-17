@@ -72,7 +72,8 @@ export const CURRENT_EVN = {
 export const ROBOT_STATUS_VAL = {
   waitUse: 'waitUse',  // 未启动
   inUse: 'inUse', // 启动中
-  exception: 'exception' // 异常
+  exception: 'exception', // 异常
+  expired: 'expired' // 过期
 }
 
 
@@ -100,4 +101,11 @@ export const STORAGE_KEY = {
 export const ROBOT_ALWAYS_EXPLAIN = {
   open: 1,  // 设置cookie
   close: 0 // 用户信息
+}
+
+/**
+ * @constant 草稿箱的key
+ */
+export const DRAFT_TYPE = {
+  editRobotDraft: 'editRobotDraft'
 }

@@ -43,17 +43,26 @@
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
-              <!-- S 启动/暂停 -->
-              <a-popconfirm
-                :title="getTipContent(record.status, record.id, record.name, record.roomId)"
-                ok-text="确定"
-                cancel-text="取消"
-                @confirm="handleRobot(record.status, record.id)"
-              >
-                <a class="x-action-btn">{{ ROBOT_STATUS[record.status].btnText }}</a>
-              </a-popconfirm>
-              <a-divider type="vertical"/>
+              <!-- S 启动/暂停/续费 -->
+              <template v-if="record.status !== ROBOT_STATUS_VAL.expired">
+                <a-popconfirm
+                  :title="getTipContent(record.status, record.id, record.name, record.roomId)"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  @confirm="handleRobot(record.status, record.id)"
+                >
+                  <a class="x-action-btn">{{ ROBOT_STATUS[record.status].btnText }}</a>
+                </a-popconfirm>
+              </template>
               <!-- E 启动/暂停 -->
+
+              <!-- S 续费 -->
+              <template v-else>
+                <a class="x-action-btn" @click="handleRobot(record.status, record.id)">{{ ROBOT_STATUS[record.status].btnText }}</a>
+              </template>
+              <!-- E 续费 -->
+              
+              <a-divider type="vertical"/>
 
               <!-- S 开启讲解常驻 -->
               <a-popconfirm
@@ -62,24 +71,29 @@
                 cancel-text="取消"
                 @confirm="setRobotAlwaysExplain(record.permanentOpen, record.id)"
               >
-                <a class="x-action-btn">{{record.permanentOpen === ROBOT_ALWAYS_EXPLAIN.open ? '关闭' : '开启'}}讲解常驻</a>
+                <a class="x-action-btn" v-if="record.status !== ROBOT_STATUS_VAL.expired">{{record.permanentOpen === ROBOT_ALWAYS_EXPLAIN.open ? '关闭' : '开启'}}讲解常驻</a>
               </a-popconfirm>
               <a-divider type="vertical"/>
                <!-- E 开启讲解常驻 -->
 
+               <!-- S 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
+              <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="robotDataStatistics(record.id)">直播数据</a>
+              <a-divider type="vertical" />
+              <!-- E 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
+
               <!-- S 修改 -->
-              <a class="x-action-btn" @click="editRobot(record.id)">修改</a>
+              <a class="x-action-btn" v-if="record.status !== ROBOT_STATUS_VAL.expired" @click="editRobot(record.id)">修改</a>
               <a-divider type="vertical" />
               <!-- E 修改 -->
 
-              <!-- S 删除 -->
+              <!-- S 删除, 当在过期时才能删除 -->
               <a-popconfirm
                 :title="`确定要删除小助手【${record.name}】吗?`"
                 ok-text="确定"
                 cancel-text="取消"
                 @confirm="confirm(record.id)"
               >
-                <a class="x-action-btn">删除</a>
+                <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.expired">删除</a>
               </a-popconfirm>
               <!-- E 删除 -->
             </span>
@@ -87,6 +101,24 @@
         </template>
       </a-table>
     </div>
+
+    <!-- S 激活码的弹框 -->
+    <a-modal
+      v-model:visible="isShowCodeModal"
+      :title="data.currentOptionText"
+      :footer="null"
+    >
+      <a-form ref="codeForm" class="x-login-form" :rules="rules" :model="data" @finish="handleCode">
+        <a-form-item label="激活码" name="code">
+          <a-input placeholder="请输入激活码" v-model:value="data.code" :maxlength="8" />
+        </a-form-item>
+        <a-form-item class="text-align-right">
+          <a-button  class="margin-right-12" @click="isShowCodeModal = false">取消</a-button>
+          <a-button type="primary" html-type="submit">确定</a-button>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+    <!-- E 激活码的弹框 -->
   </root-page>
 </template>
 
@@ -98,12 +130,13 @@
     startOrRestartRobotServer, 
     stopRobotServer, 
     deleteRobotServer,
-    setRobotAlwaysExplainServer
+    setRobotAlwaysExplainServer,
+    renewRobotServer
   } from '@/api'
-  import { reactive, onMounted } from 'vue'
+  import { reactive, ref, onMounted } from 'vue'
   import { ROBOT_STATUS_VAL, ROUTE_MAP, ROBOT_ALWAYS_EXPLAIN } from '@/constants'
+  import { validateCode, getSessionStorage } from '@/hooks'
   import { message } from 'ant-design-vue'
-  import { getSessionStorage } from '@/hooks'
 
   const columns = [
   {
@@ -149,17 +182,23 @@
     width: 150
   },
   {
+    title: '过期时间',
+    dataIndex: 'endTime',
+    key: 'endTime',
+    width: 150
+  },
+  {
     title: '操作',
     key: 'action',
     fixed: 'right',
-    width: 120
+    width: 140
   },
 ]
 
 // 机器人状态
 const ROBOT_STATUS = {
   [ROBOT_STATUS_VAL.waitUse]: {
-    icon: 'IconStop',
+    icon: 'IconNoStart',
     className: '-no-start',
     status: '未启动',
     btnText: '启动'
@@ -175,6 +214,12 @@ const ROBOT_STATUS = {
     className: '-error',
     status: '异常中',
     btnText: '重启'
+  },
+  [ROBOT_STATUS_VAL.expired]: {
+    icon: 'IconExpired',
+    className: '-expired',
+    status: '已过期',
+    btnText: '续费'
   }
 }
 
@@ -193,8 +238,24 @@ const ROBOT_STATUS = {
       pageSize: 100
     },
     robotList: [] as API.RobotList[],
-    total: 0 // 列表总条数
+    total: 0, // 列表总条数
+    currentOptionText: '创建', // 当前是续费操作，还是创建操作；弹框的提示标题文案
+    currentRenewRobotId: '', // 当前需要续期的机器人ID
+    code: '' // 续费的激活码
   })
+
+/**
+ * 表单验证规则
+ */
+const rules = {
+  code: [{ required: true, validator: validateCode }]
+}
+
+// 激活码表单
+const codeForm = ref()
+
+// 展示激活码弹框
+let isShowCodeModal = ref(false)
 
 defineProps({
   dataSource: {
@@ -207,7 +268,8 @@ defineProps({
  * @function createRobot 创建机器人
  */
 const createRobot = () => {
-  routeChange(ROUTE_MAP.CreateRobot)
+  data.currentOptionText = '创建'
+  isShowCodeModal.value = true
 }
 
 /**
@@ -252,8 +314,18 @@ const editRobot = (id: string) => {
   })
 }
 
-/******************************** S 机器人操作业务逻辑 ***********************************/
 
+/**
+ * @function editRobot 编辑机器人
+ * @param id 机器人id
+ */
+ const robotDataStatistics = (id: string) => {
+  routeChange(ROUTE_MAP.RobotDataStatistics, {
+    id
+  })
+}
+
+/******************************** S 机器人操作业务逻辑 ***********************************/
 /**
  * @function startRobot 启动机器人
  */
@@ -285,6 +357,48 @@ const editRobot = (id: string) => {
     message.error(`'暂停失败：${error.message}`)
   }
 }
+
+/**
+ * @function 打开续费弹框
+ * @param id 机器人id
+ */
+const openRenewModal = (id: string) => {
+  data.currentOptionText = '续费'
+  data.currentRenewRobotId = id
+  isShowCodeModal.value = true
+}
+
+/**
+ * @function 处理激活码弹框逻辑，续费则是续费；不然是创建
+ */
+const handleCode = () => {
+
+  if (data.currentOptionText === '续费') {
+      renew()
+    } else {
+      routeChange(ROUTE_MAP.CreateRobot, {
+      code: data.code
+    })
+  }
+}
+
+/**
+ * @function renew 续费
+ */
+const renew = async () => {
+  try {
+    await renewRobotServer({
+      id: data.currentRenewRobotId,
+      code: data.code,
+    })
+    getRobotList()
+    isShowCodeModal.value = false
+    message.success('续费成功')
+  } catch (error) {
+    message.error(`'续费失败：${error.message}`)
+  }
+}
+
 /**
  * @function 操作时的提示判断
  * @param status 机器人状态 
@@ -319,6 +433,10 @@ const handleRobot = (status: string, id: string) => {
       stopRobot(id)
       console.log('暂停')
       break
+    case ROBOT_STATUS_VAL.expired:
+      openRenewModal(id)
+      console.log('续费')
+      break
     default:
       console.log('其他')
       break
@@ -334,16 +452,16 @@ const setRobotAlwaysExplain = async (open: number, id: number) => {
       open: open === ROBOT_ALWAYS_EXPLAIN.open ? ROBOT_ALWAYS_EXPLAIN.close : ROBOT_ALWAYS_EXPLAIN.open
     })
     getRobotList()
-    message.success('删除成功')
+    message.success('设置讲解常驻成功')
   } catch (error) {
-    message.error(`删除失败，原因是:${error.message}`)
+    message.error(`设置讲解常驻失败，原因是:${error.message}`)
   }
 }
 /******************************** E 机器人设置讲解常驻业务逻辑 ***********************************/
 
 /******************************** S 删除机器人的业务逻辑 ***********************************/
   /**
-   * @function stopRobot 启动机器人
+   * @function stopRobot 删除机器人
    */
   const deleteRobot = async (id: string) => {
     try {

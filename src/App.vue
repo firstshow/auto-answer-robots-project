@@ -6,10 +6,12 @@
 
 <script setup lang="ts">
   import { onMounted } from 'vue'
+  import { getCookie } from '@/utils/inject'
 
   // 时机成熟 回调函数自动执行
   onMounted(() => {
     console.log('App.vue onMounted')
+    getCookie()
   })
 </script>
 
@@ -50,6 +52,9 @@
   }
   :global(.ant-table-cell-fix-right) {
       background-color: @theme-back-color !important;
+  }
+  :global(.ant-form-item-explain) {
+    font-size: 12px !important;
   }
 }
 </style>

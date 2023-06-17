@@ -1,4 +1,4 @@
-import { Button, Table, Badge, Form, Input, Textarea, List, Row, Col, Popconfirm, Dropdown, Menu, MenuItem } from 'ant-design-vue';
+import { Button, Table, Badge, Form, Input, Textarea, List, Row, Col, Popconfirm, Dropdown, Menu, MenuItem, Modal, Image } from 'ant-design-vue';
 
 function useComponent(app: any) {
     app
@@ -15,6 +15,8 @@ function useComponent(app: any) {
     .use(Dropdown)
     .use(Menu)
     .use(MenuItem)
+    .use(Modal)
+    .use(Image)
 }
 
 export default useComponent

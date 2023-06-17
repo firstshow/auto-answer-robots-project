@@ -10,6 +10,7 @@
         }
         .x-action-btn {
             margin-right: 8px;
+            white-space:nowrap; 
             &:last-child {
                 margin-right: 0;
             }
@@ -22,11 +23,11 @@
             &.-starting {
                 color: @robot-starting-status;
             }
-            &.-wait-start {
-                color: @robot-wait-status;
-            }
             &.-error {
                 color: @robot-error-status;
+            }
+            &.-expired {
+                color: @robot-expired-status;
             }
         }
     }

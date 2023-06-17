@@ -4,7 +4,6 @@ import { setupRouter } from './routes'
 import useComponent from './plugins/antdv'
 import { setupAssets } from '@/plugins'
 import 'ant-design-vue/dist/antd.dark.less'
-import '@/utils/inject'
 
 import App from './App.vue'
 

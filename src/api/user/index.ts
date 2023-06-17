@@ -10,3 +10,14 @@ export function loginServer(data: API.LoginParams) {
     noToken: true
   })
 }
+
+/**
+ * @api 注册
+ */
+export function registerServer(data: API.LoginParams) {
+  return request<API.resResult<API.LoginRes>>({
+    url: '/api/module/default/member/portal/nl/user-api/register',
+    data,
+    noToken: true
+  })
+}

@@ -6,7 +6,7 @@
     <a-dropdown>
         <div class="cursor-pointer flex items-center" @click.prevent>
           <svg-icon name="IconLogo" size="32" />
-          <span>{{ filterPhone(phone) }}</span>
+          <span>{{ filterUsername(username) }}</span>
           <svg-icon class="margin-left-8" name="IconDownArrow" size="12"/>
         </div>
         <template #overlay>
@@ -24,16 +24,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { routeGoBack} from '@/hooks'
   import { getLocalStorage, removeLocalStorage } from '@/hooks/storage'
   import { STORAGE_KEY } from '@/constants/common'
-  import { routeChange } from "@/hooks/routeChange"
+  import { routeReplaceChange } from "@/hooks/routeChange"
   import { ref, onMounted } from 'vue'
   import { ROUTE_MAP } from '@/constants'
+
+
+  const emit = defineEmits(['back'])
 
   defineOptions({
     name: 'XHeader'
   })
+
   defineProps({
     hasBack: {
       type: Boolean,
@@ -41,13 +44,13 @@
     }
   })
 
-  let phone = ref('')
+  let username = ref('')
 
   /**
    * @function back 返回上一页
    */
   const back = () => {
-    routeGoBack(-1)
+    emit('back')
   }
 
   /**
@@ -55,14 +58,14 @@
    */
   const initUserInfo = () => {
     const userInfo = JSON.parse(getLocalStorage(STORAGE_KEY.userInfo))
-    phone.value = userInfo.phone
+    username.value = userInfo.username
   }
 
   /**
    * @function logout 过滤手机号
    */
-  const filterPhone = (phone: string) => {
-    return `${phone.slice(0, 3)}****${phone.slice(-4)}`
+  const filterUsername = (username: string) => {
+    return `${username.slice(0, 3)}****${username.slice(-4)}`
   }
 
   /**
@@ -71,7 +74,9 @@
   const logout = () => {
     console.log('退出登录')
     removeLocalStorage(STORAGE_KEY.userInfo)
-    routeChange(ROUTE_MAP.Login)
+    setTimeout(() => {
+      routeReplaceChange(ROUTE_MAP.Login)
+    }, 2000)
   }
 
   onMounted(()=>{

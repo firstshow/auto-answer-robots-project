@@ -28,12 +28,42 @@ declare namespace API {
     keyword: string
     reply: string
   }
+
+   /**
+   * @type 检核激活码是否正确入参
+   */
+  type checkCodeParams = {
+    code: string
+  }
+
+   /**
+   * @type 检核激活码是否正确入参
+   */
+   type renewRobotParams = {
+    id: string
+    code: string
+  }
+
+  /**
+   * @type 获取直播间信息接口入参
+   */
+  type GetRoomInfoParams = {
+    id: string
+  }
+
+  /**
+   * @type 获取直播间直播数据接口入参
+   */
+  type GetRoomDataStatisticsParams = {
+    id: string
+  }
  
    /**
    * @type 新增机器人接口入参 
    */
    type AddRobotParams = {
     id?: string // 机器人id
+    code: string // 机器人激活码
     name: string // 机器人名称
     storeName: string // 店铺名称
     storeAddress: string // 店铺地址
@@ -124,6 +154,42 @@ declare namespace API {
    type SetRobotAlwaysExplainParams = {
     open: number // 创建时间
     id: number // 更新时间
+   }
+
+    /**
+    * @type 直播间信息
+    */
+   type RoomInfoData = {
+    data: RoomInfo
+   }
+
+   /**
+    * @type 直播间信息
+    */
+   type RoomInfo = {
+    cover: string // 头像
+    nickname: string // 更新时间
+    title: string // 直播间标题
+    duration: number // 直播时长
+    create_time: number // 直播开始时间
+   }
+
+   /**
+    * @type 直播间数据统计
+    */
+   type RoomDataStatisticsData = {
+    data: RoomDataStatistics[]
+  }
+
+  /**
+    * @type 直播间数据统计
+    */
+  type RoomDataStatistics = {
+    key: string // key
+    name: string // 标题栏
+    raw_value: string // 金额分
+    unit: number // 单位
+    value: number // 金额
    }
 }
 

@@ -14,8 +14,8 @@ declare namespace API {
    * @type 登录接口入参 
    */
    type LoginParams = {
-    phone: string // 手机号
-    code: string // 授权码
+    username: string // 手机号
+    password: string // 授权码
     scenario: string // 场景
   }
 
