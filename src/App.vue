@@ -6,10 +6,12 @@
 
 <script setup lang="ts">
   import { onMounted } from 'vue'
+  import { getCookie } from '@/utils/inject'
 
   // 时机成熟 回调函数自动执行
   onMounted(() => {
     console.log('App.vue onMounted')
+    getCookie()
   })
 </script>
 

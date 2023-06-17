@@ -42,16 +42,16 @@ export const timestampToTime = (timestamp: number) => {
  */
 export const showTime = (val) => {
     if(val<60){
-        return `00:00:${val}`
+        return `00:00:${('0' + val).slice(-2)}`
     }else{
         let min_total = Math.floor(val / 60); // 分钟
         let sec = Math.floor(val % 60); // 余秒
         if(min_total<60){
-        return `00:${min_total}:${sec}`
+        return `00:${('0' + min_total).slice(-2)}:${('0' + sec).slice(-2)}`
         }else{
         let hour_total = Math.floor(min_total / 60); // 小时数
         let min = Math.floor(min_total % 60); // 余分钟
-        return `${hour_total}:${min}:${sec}`
+        return `${hour_total > 9 ? hour_total : '0' + hour_total}:${('0' + min).slice(-2)}:${('0' + sec).slice(-2)}`
         }
     }
 }

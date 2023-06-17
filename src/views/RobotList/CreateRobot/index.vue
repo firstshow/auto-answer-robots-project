@@ -25,9 +25,10 @@
         <a-list class="x-from-input" size="small" bordered :data-source="formState.packageList">
           <template #header>
             <a-row>
+              <a-col :span="1">排序</a-col>
               <a-col :span="7">套餐标题</a-col>
               <a-col :span="4">套餐价格</a-col>
-              <a-col :span="11">套餐描述</a-col>
+              <a-col :span="10">套餐描述</a-col>
               <a-col class="cursor-pointer" :span="1" :offset="1" @click="addGoods">
                 <svg-icon name="IconAdd" size="16" />
               </a-col>
@@ -35,6 +36,11 @@
           </template>
           <template #renderItem="{ item, index }">
             <a-row class="x-list-content-box">
+              <a-col class="x-list-input-box" :span="1">
+                <a-form-item-rest>
+                  <svg-icon class="cursor-pointer" name="IconUpMove" size="16" @click="upMove(index)" />
+                </a-form-item-rest>
+              </a-col>
               <a-col class="x-list-input-box" :span="7">
                 <a-form-item-rest>
                   <a-input class="x-list-input" v-model:value="item.title" placeholder="请输入套餐标题" />
@@ -45,7 +51,7 @@
                   <a-input class="x-list-input" v-model:value="item.price" placeholder="请输入价格" />
                 </a-form-item-rest>
               </a-col>
-              <a-col class="x-list-input-box" flex :span="11">
+              <a-col class="x-list-input-box" flex :span="10">
                 <a-form-item-rest>
                   <a-textarea class="x-list-textarea" v-model:value="item.description" placeholder="请输入套餐描述" />
                 </a-form-item-rest>
@@ -282,6 +288,21 @@ const addKeyword = () => {
     keyword: '',
     reply: ''
   })
+}
+
+/**
+ * @function upMove 上移
+ */
+const upMove = (index: number) => {
+  console.log('upMove')
+  // 与前面一个元素交换位置
+  if (index > 0) {
+    let temp = formState.packageList[index - 1]
+    formState.packageList[index - 1] = formState.packageList[index]
+    formState.packageList[index] = temp
+  } else {
+    message.info('已经是第一个了')
+  }
 }
 
 /**
