@@ -65,14 +65,15 @@
               <a-divider type="vertical"/>
 
               <!-- S 开启讲解常驻 -->
-              <a-popconfirm
+              <!-- <a-popconfirm
                 :title="`确定${record.permanentOpen === ROBOT_ALWAYS_EXPLAIN.open ? '关闭' : '开启'}当前直播间讲解常驻吗`"
                 ok-text="确定"
                 cancel-text="取消"
                 @confirm="setRobotAlwaysExplain(record.permanentOpen, record.id)"
               >
                 <a class="x-action-btn" v-if="record.status !== ROBOT_STATUS_VAL.expired">{{record.permanentOpen === ROBOT_ALWAYS_EXPLAIN.open ? '关闭' : '开启'}}讲解常驻</a>
-              </a-popconfirm>
+              </a-popconfirm> -->
+              <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="productManage(record.id)">商品管理</a>
               <a-divider type="vertical"/>
                <!-- E 开启讲解常驻 -->
 
@@ -130,11 +131,10 @@
     startOrRestartRobotServer, 
     stopRobotServer, 
     deleteRobotServer,
-    setRobotAlwaysExplainServer,
     renewRobotServer
   } from '@/api'
   import { reactive, ref, onMounted } from 'vue'
-  import { ROBOT_STATUS_VAL, ROUTE_MAP, ROBOT_ALWAYS_EXPLAIN } from '@/constants'
+  import { ROBOT_STATUS_VAL, ROUTE_MAP } from '@/constants'
   import { validateCode, getSessionStorage } from '@/hooks'
   import { message } from 'ant-design-vue'
 
@@ -325,6 +325,14 @@ const editRobot = (id: string) => {
   })
 }
 
+/******************************** S 商品管理 ***********************************/
+const productManage = (id: string) => {
+  routeChange(ROUTE_MAP.ProductManage, {
+    id
+  })
+}
+/******************************** S 商品管理 ***********************************/
+
 /******************************** S 机器人操作业务逻辑 ***********************************/
 /**
  * @function startRobot 启动机器人
@@ -445,18 +453,18 @@ const handleRobot = (status: string, id: string) => {
 /******************************** E 机器人操作业务逻辑 ***********************************/
 
 /******************************** S 机器人设置讲解常驻业务逻辑 ***********************************/
-const setRobotAlwaysExplain = async (open: number, id: number) => {
-  try {
-    await setRobotAlwaysExplainServer({
-      id,
-      open: open === ROBOT_ALWAYS_EXPLAIN.open ? ROBOT_ALWAYS_EXPLAIN.close : ROBOT_ALWAYS_EXPLAIN.open
-    })
-    getRobotList()
-    message.success('设置讲解常驻成功')
-  } catch (error) {
-    message.error(`设置讲解常驻失败，原因是:${error.message}`)
-  }
-}
+// const setRobotAlwaysExplain = async (open: number, id: number) => {
+//   try {
+//     await setRobotAlwaysExplainServer({
+//       id,
+//       open: open === ROBOT_ALWAYS_EXPLAIN.open ? ROBOT_ALWAYS_EXPLAIN.close : ROBOT_ALWAYS_EXPLAIN.open
+//     })
+//     getRobotList()
+//     message.success('设置讲解常驻成功')
+//   } catch (error) {
+//     message.error(`设置讲解常驻失败，原因是:${error.message}`)
+//   }
+// }
 /******************************** E 机器人设置讲解常驻业务逻辑 ***********************************/
 
 /******************************** S 删除机器人的业务逻辑 ***********************************/

@@ -38,6 +38,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: ''
     }
+  },
+  {
+    path: '/productManage',
+    name: 'productManage',
+    component: () => import('@/views/RobotList/ProductManage/index.vue'),
+    meta: {
+      title: ''
+    }
   }
 ]
 

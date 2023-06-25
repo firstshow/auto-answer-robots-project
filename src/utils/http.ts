@@ -92,6 +92,7 @@ fsFetch.customSuccessHandle = (result, _reqData, reqOptions, context) => {
 }
 
 fsFetch.customErrorHandle = (error, _reqData, reqOptions, context) => {
+  console.log('请求失败：', error, _reqData, reqOptions, context)
   const endTimeMs = new Date().getTime() // 请求结束时间
   const endTime = dayjs(endTimeMs).format('HH:mm:ss,SSS')
   const { url, baseUrl, specialError, startTimeMs, method, data, header } = reqOptions

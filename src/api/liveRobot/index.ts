@@ -111,13 +111,27 @@ export function getRobotDetailServer(data: API.GetRobotDetailParams) {
 }
 
 /**
- * @api 启动或重启机器人
+ * @api 设置讲解常驻
  * @param data 
  * @returns 
  */
 export function setRobotAlwaysExplainServer(data: API.SetRobotAlwaysExplainParams) {
   return request<API.resResult<string>>({
-    url: '/api/ltk/ltkAssistant-api/permanent',
+    url: '/api/ltk/ltkAssistantGoods-api/permanent',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+
+/**
+ * @api 取消或开启直播间商品讲解
+ * @param data 
+ * @returns 
+ */
+export function setRobotExplainServer(data: API.OpenOrNotExplainParams) {
+  return request<API.resResult<API.GetProductListData>>({
+    url: '/api/ltk/ltkAssistantGoods-api/GoodsExplainOrNot',
     data,
     method: 'GET',
     noToken: true
@@ -152,3 +166,72 @@ export function getRoomDataStatisticsServer(data: API.GetRoomDataStatisticsParam
   })
 }
 
+/**
+ * @api 获取直播间商品列表
+ * @param data 
+ * @returns 
+ */
+export function getProductListServer(data: API.GetProductListParams) {
+  return request<API.resResult<API.GetProductListData>>({
+    url: '/api/ltk/ltkAssistantGoods-api/goodsList',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+
+/**
+ * @api 获取秒杀详情
+ * @param data 
+ * @returns 
+ */
+export function getFlashKillingInfoServer(data: API.GetFlashKillingInfoParams) {
+  return request<API.resResult<API.GetFlashKillingInfoData>>({
+    url: '/api/ltk/ltkAssistantGoods-api/seckillDetail',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+
+/**
+ * @api 秒杀设置
+ * @param data 
+ * @returns 
+ */
+export function setFlashKillingServer(data: any) {
+  return request<API.resResult<API.GetProductListData>>({
+    url: '/api/ltk/ltkAssistantGoods-api/assign',
+    data,
+    method: 'POST',
+    noToken: true
+  })
+}
+
+/**
+ * @api 秒杀设置
+ * @param data 
+ * @returns 
+ */
+export function OffShelfServer(data: API.OffShelfParams) {
+  return request<API.resResult<API.GetProductListData>>({
+    url: '/api/ltk/ltkAssistantGoods-api/assignDisable',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+
+/**
+ * @api 获取秒杀配置
+ * @param data 
+ * @returns 
+ */
+export function getFlashKillingConfigServer(data: API.GetFlashKillingConfigParams) {
+  return request<API.resResult<API.GetFlashKillingConfigData>>({
+    url: '/api/ltk/ltkAssistantGoods-api/flashSaleConfig',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
