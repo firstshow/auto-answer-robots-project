@@ -65,14 +65,15 @@
               <a-divider type="vertical"/>
 
               <!-- S 开启讲解常驻 -->
-              <a-popconfirm
+              <!-- <a-popconfirm
                 :title="`确定${record.permanentOpen === ROBOT_ALWAYS_EXPLAIN.open ? '关闭' : '开启'}当前直播间讲解常驻吗`"
                 ok-text="确定"
                 cancel-text="取消"
                 @confirm="setRobotAlwaysExplain(record.permanentOpen, record.id)"
               >
                 <a class="x-action-btn" v-if="record.status !== ROBOT_STATUS_VAL.expired">{{record.permanentOpen === ROBOT_ALWAYS_EXPLAIN.open ? '关闭' : '开启'}}讲解常驻</a>
-              </a-popconfirm>
+              </a-popconfirm> -->
+              <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="productManage(record.id)">商品管理</a>
               <a-divider type="vertical"/>
                <!-- E 开启讲解常驻 -->
 
@@ -130,11 +131,10 @@
     startOrRestartRobotServer, 
     stopRobotServer, 
     deleteRobotServer,
-    setRobotAlwaysExplainServer,
     renewRobotServer
   } from '@/api'
   import { reactive, ref, onMounted } from 'vue'
-  import { ROBOT_STATUS_VAL, ROUTE_MAP, ROBOT_ALWAYS_EXPLAIN } from '@/constants'
+  import { ROBOT_STATUS_VAL, ROUTE_MAP } from '@/constants'
   import { validateCode, getSessionStorage } from '@/hooks'
   import { message } from 'ant-design-vue'
 
@@ -287,7 +287,6 @@ const refresh = async () => {
  * @function 获取机器人列表
  */
 const getRobotList = async () => {
-  console.log('getRobotList')
   if (data.isLoading) return
   data.isLoading = true
   try {
@@ -325,19 +324,30 @@ const editRobot = (id: string) => {
   })
 }
 
+/******************************** S 商品管理 ***********************************/
+const productManage = (id: string) => {
+  routeChange(ROUTE_MAP.ProductManage, {
+    id
+  })
+}
+/******************************** S 商品管理 ***********************************/
+
 /******************************** S 机器人操作业务逻辑 ***********************************/
 /**
  * @function startRobot 启动机器人
  */
  const startOrRestartRobot = async (id: string) => {
+  const hide = message.loading('启动中...', 0)
   try {
     await startOrRestartRobotServer({
       id,
       cookie: getSessionStorage('cookie')
     })
     getRobotList()
+    hide()
     message.success('启动成功')
   } catch (error) {
+    hide()
     message.error(`'启动失败：${error.message}`)
   }
 }
@@ -347,13 +357,16 @@ const editRobot = (id: string) => {
  */
  const stopRobot = async (id: string) => {
   console.log('stopRobot')
+  const hide = message.loading('暂停中...', 0)
   try {
     await stopRobotServer({
       id
     })
     getRobotList()
+    hide()
     message.success('暂停成功')
   } catch (error) {
+    hide()
     message.error(`'暂停失败：${error.message}`)
   }
 }
@@ -386,6 +399,7 @@ const handleCode = () => {
  * @function renew 续费
  */
 const renew = async () => {
+  const hide = message.loading('启动中...', 0)
   try {
     await renewRobotServer({
       id: data.currentRenewRobotId,
@@ -393,8 +407,10 @@ const renew = async () => {
     })
     getRobotList()
     isShowCodeModal.value = false
+    hide()
     message.success('续费成功')
   } catch (error) {
+    hide()
     message.error(`'续费失败：${error.message}`)
   }
 }
@@ -444,33 +460,21 @@ const handleRobot = (status: string, id: string) => {
 }
 /******************************** E 机器人操作业务逻辑 ***********************************/
 
-/******************************** S 机器人设置讲解常驻业务逻辑 ***********************************/
-const setRobotAlwaysExplain = async (open: number, id: number) => {
-  try {
-    await setRobotAlwaysExplainServer({
-      id,
-      open: open === ROBOT_ALWAYS_EXPLAIN.open ? ROBOT_ALWAYS_EXPLAIN.close : ROBOT_ALWAYS_EXPLAIN.open
-    })
-    getRobotList()
-    message.success('设置讲解常驻成功')
-  } catch (error) {
-    message.error(`设置讲解常驻失败，原因是:${error.message}`)
-  }
-}
-/******************************** E 机器人设置讲解常驻业务逻辑 ***********************************/
-
 /******************************** S 删除机器人的业务逻辑 ***********************************/
   /**
    * @function stopRobot 删除机器人
    */
   const deleteRobot = async (id: string) => {
+    const hide = message.loading('删除中...', 0)
     try {
       await deleteRobotServer({
         id
       })
       getRobotList()
+      hide()
       message.success('删除成功')
     } catch (error) {
+      hide()
       message.error(`删除失败，原因是:${error.message}`)
     }
   }

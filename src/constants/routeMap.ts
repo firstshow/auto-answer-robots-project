@@ -6,5 +6,6 @@ export const ROUTE_MAP = {
     Home: 'home',
     RobotList: 'robotList',
     CreateRobot: 'createRobot',
-    RobotDataStatistics: 'robotDataStatistics'
+    RobotDataStatistics: 'robotDataStatistics',
+    ProductManage: 'productManage',
   }

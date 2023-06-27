@@ -18,5 +18,6 @@
 <style lang="less">
   .root-page {
     min-height: 600px;
+    padding: 0 16px;
   }
 </style>

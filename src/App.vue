@@ -56,5 +56,11 @@
   :global(.ant-form-item-explain) {
     font-size: 12px !important;
   }
+  :global(.ant-message) {
+    font-size: 12px !important;
+  }
+  :global(.ant-message .anticon) {
+    top: -2px;
+  }
 }
 </style>

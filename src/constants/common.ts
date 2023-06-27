@@ -109,3 +109,13 @@ export const ROBOT_ALWAYS_EXPLAIN = {
 export const DRAFT_TYPE = {
   editRobotDraft: 'editRobotDraft'
 }
+
+/**
+ * @constant 讲解常驻
+ */
+export const PERMANENT_TYPE = {
+  open: 1, // 开启常驻
+  close: 0,
+  openOnce: 3, // 开启一次讲解
+  reject: 4 // 取消讲解
+}

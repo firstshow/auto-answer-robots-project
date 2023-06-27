@@ -152,8 +152,9 @@ declare namespace API {
     * @type 获取机器人详情接口出参
     */
    type SetRobotAlwaysExplainParams = {
-    open: number // 创建时间
-    id: number // 更新时间
+    open: number // 0关，1开
+    cardId: string // 商品ID
+    assistantId: string // 小助手ID
    }
 
     /**
@@ -190,6 +191,83 @@ declare namespace API {
     raw_value: string // 金额分
     unit: number // 单位
     value: number // 金额
+   }
+
+  /**
+    * @type 获取直播间商品列表
+    */
+   type GetProductListParams = {
+     assistantId: string // 小助手ID
+   }
+
+   /**
+    * @type 获取直播间商品列表
+    */
+   type GetProductListData = {
+    card_list: {
+      seckill_loop: boolean // 是否秒杀
+      card_id: string // 商品ID
+      card_data: string // 商品信息
+      component_id: string // 商品ID
+      permanent_open: number // 是否开启讲解 1开启，0关闭
+    }[]
+   }
+
+   /**
+    * @type 直播间讲解商品
+    */
+   type OpenOrNotExplainParams = {
+    assistantId: string // 商品ID
+    cardId: string // 商品ID
+    operation: number // 3讲解，4取消讲解
+   }
+
+    /**
+    * @type 获取秒杀信息入参
+    */
+   type GetFlashKillingInfoParams = {
+    assignRecordId: string // 商品ID
+    assistantId: string // 助手ID
+    couponId: string // 秒杀活动ID
+   }
+
+    /**
+    * @type 获取秒杀信息
+    */
+   type GetFlashKillingInfoData = {
+    left_stock: string // 剩余库存
+   }
+
+   /**
+    * @type 设置秒杀
+    */
+   type SetFlashKillingParams = {
+    buyLimit: number // 购买限制
+    duration: number // 秒杀时长
+    id: string // 商品ID
+    loop: number // 循环次数
+    stock: number // 库存
+   }
+
+   /**
+    * @type 上下架入参
+    */
+   type OffShelfParams = {
+    assignRecordId: string // recordId
+    assistantId: number // 助手ID
+    couponId: string // 秒杀活动ID
+   }
+
+   type GetFlashKillingConfigParams = {
+    assistantId: string // 助手ID
+    grouponIds: string // 拼团ID
+   }
+
+   type GetFlashKillingConfigData = {
+    groupon_has_flash_sale: string[] // 有秒杀商品ID列表
+    groupon_url_map: {
+      [string]: string
+    }
    }
 }
 

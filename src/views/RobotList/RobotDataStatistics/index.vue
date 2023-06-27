@@ -92,13 +92,16 @@ const runLiveTime = () => {
  * @function startRobot 获取直播间信息
  */
  const getRoomDataStatistics = async () => {
+  const hide = message.loading('加载中...', 0)
   try {
     let resData = await getRoomDataStatisticsServer({
       id: router.query.id as string
     })
     data.liveDataStatistics = resData.result.data
+    hide()
    console.log('直播数据统计信息：', resData)
   } catch (error) {
+    hide()
     message.error(`'获取直播数据统计信息失败：${error.message}`)
   }
 }

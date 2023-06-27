@@ -233,30 +233,36 @@ const getRobotDetail = async () => {
   if (!id) {
     return false
   }
-
-  let resData = await getRobotDetailServer({ id })
-  let {
-    name,
-    storeName,
-    storeAddress,
-    industry,
-    businessTime,
-    packageList,
-    packageLimit,
-    keywordList,
-    note
-  } = resData.result
-  formState.name = name
-  formState.storeName = storeName
-  formState.storeAddress = storeAddress
-  formState.industry = industry
-  formState.businessTime = businessTime
-  formState.packageList = packageList
-  formState.packageLimit = packageLimit
-  formState.keywordList = keywordList
-  formState.note = note
-  console.log(resData)
-  isChange = false
+  const hide = message.loading('加载中...', 0)
+  try {
+    let resData = await getRobotDetailServer({ id })
+    let {
+      name,
+      storeName,
+      storeAddress,
+      industry,
+      businessTime,
+      packageList,
+      packageLimit,
+      keywordList,
+      note
+    } = resData.result
+    formState.name = name
+    formState.storeName = storeName
+    formState.storeAddress = storeAddress
+    formState.industry = industry
+    formState.businessTime = businessTime
+    formState.packageList = packageList
+    formState.packageLimit = packageLimit
+    formState.keywordList = keywordList
+    formState.note = note
+    console.log(resData)
+    isChange = false
+    hide()
+  } catch (error) {
+    hide()
+    message.error(`获取小助手详情失败:${error.message}`)
+  }
 }
 
 /**
@@ -358,16 +364,17 @@ const saveRobot = async () => {
   try {
     let resData = await handleRobotFun(reqData)
     console.log(resData)
-    message.info(`${id ? '修改' : '添加'}成功`)
+    message.success(`${id ? '修改' : '添加'}成功`)
     clearInterval(setDraftTimer)
     clearDraft(DRAFT_TYPE.editRobotDraft)
     // 取消监听表单数据
     watchFlag()
+    
     setTimeout(() => {
       routeGoBack(-1)
     }, 2000)
   } catch (error) {
-    message.info(`${id ? '修改' : '添加'}失败，${error.message}`)
+    message.error(`${id ? '修改' : '添加'}失败，${error.message}`)
   }
 }
 

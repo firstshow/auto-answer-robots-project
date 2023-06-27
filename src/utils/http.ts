@@ -61,7 +61,7 @@ const getHeaderParams = (obj) => {
     nonce
   }
 }
-const baseUrl = 'https://group-guest-api.netmi.com.cn'
+const baseUrl = import.meta.env.VITE_BASE_API
 const fsFetch = new FsFetch({})
 fsFetch.setInterceptor(false)
 fsFetch.setMockUrl('http://127.0.0.1:4523/mock/1080891/')
@@ -92,6 +92,7 @@ fsFetch.customSuccessHandle = (result, _reqData, reqOptions, context) => {
 }
 
 fsFetch.customErrorHandle = (error, _reqData, reqOptions, context) => {
+  console.log('请求失败：', error, _reqData, reqOptions, context)
   const endTimeMs = new Date().getTime() // 请求结束时间
   const endTime = dayjs(endTimeMs).format('HH:mm:ss,SSS')
   const { url, baseUrl, specialError, startTimeMs, method, data, header } = reqOptions

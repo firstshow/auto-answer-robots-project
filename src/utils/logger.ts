@@ -8,7 +8,7 @@ const logger = new FsLogger({
   logstore: import.meta.env.VITE_TRACKER_LOGSTORE, // Logstore名称
   data() {
     return {
-      AppId: `fs-vue3-mobile-${env}`,
+      AppId: `ltk-little-dolphin-${env}`,
       ...getCustomReport()
     }
   }
