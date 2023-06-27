@@ -21,10 +21,12 @@
     getProductListServer,
     getFlashKillingConfigServer
   } from '@/api'
-  import { onMounted, reactive } from 'vue'
+  import { message } from 'ant-design-vue'
+  import { onMounted, reactive, onUnmounted } from 'vue'
   import { useRoute } from 'vue-router'
 
   const router = useRoute();
+  let timer = null // 每10秒获取列表的定时器
 
   const data = reactive({
     productList: [],
@@ -72,7 +74,7 @@
       }
       getFlashKillingConfig()
     } catch (error) {
-      
+      message.error(`获取商品列表失败:${error.message}`)
     }
   }
 
@@ -93,7 +95,7 @@
       setFlashKillingFlagAndRecordId(data.hasFlashKillingList)
       console.log('最终的productList:', data.productList)
     } catch (error) {
-      
+      message.error(`获取秒杀设置失败:${error.message}`)
     }
   }
 
@@ -129,6 +131,10 @@
   /******************************** S 生命周期钩子函数业务逻辑 ***********************************/
   onMounted( async () => {
     getProductList()
+    timer = setInterval(getProductList, 5000)
+  })
+  onUnmounted(() => {
+    clearInterval(timer)
   })
   /******************************** E 生命周期钩子函数业务逻辑 ***********************************/
 </script>

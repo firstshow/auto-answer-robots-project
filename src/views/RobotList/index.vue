@@ -287,7 +287,6 @@ const refresh = async () => {
  * @function 获取机器人列表
  */
 const getRobotList = async () => {
-  console.log('getRobotList')
   if (data.isLoading) return
   data.isLoading = true
   try {
@@ -338,14 +337,17 @@ const productManage = (id: string) => {
  * @function startRobot 启动机器人
  */
  const startOrRestartRobot = async (id: string) => {
+  const hide = message.loading('启动中...', 0)
   try {
     await startOrRestartRobotServer({
       id,
       cookie: getSessionStorage('cookie')
     })
     getRobotList()
+    hide()
     message.success('启动成功')
   } catch (error) {
+    hide()
     message.error(`'启动失败：${error.message}`)
   }
 }
@@ -355,13 +357,16 @@ const productManage = (id: string) => {
  */
  const stopRobot = async (id: string) => {
   console.log('stopRobot')
+  const hide = message.loading('暂停中...', 0)
   try {
     await stopRobotServer({
       id
     })
     getRobotList()
+    hide()
     message.success('暂停成功')
   } catch (error) {
+    hide()
     message.error(`'暂停失败：${error.message}`)
   }
 }
@@ -394,6 +399,7 @@ const handleCode = () => {
  * @function renew 续费
  */
 const renew = async () => {
+  const hide = message.loading('启动中...', 0)
   try {
     await renewRobotServer({
       id: data.currentRenewRobotId,
@@ -401,8 +407,10 @@ const renew = async () => {
     })
     getRobotList()
     isShowCodeModal.value = false
+    hide()
     message.success('续费成功')
   } catch (error) {
+    hide()
     message.error(`'续费失败：${error.message}`)
   }
 }
@@ -452,33 +460,21 @@ const handleRobot = (status: string, id: string) => {
 }
 /******************************** E 机器人操作业务逻辑 ***********************************/
 
-/******************************** S 机器人设置讲解常驻业务逻辑 ***********************************/
-// const setRobotAlwaysExplain = async (open: number, id: number) => {
-//   try {
-//     await setRobotAlwaysExplainServer({
-//       id,
-//       open: open === ROBOT_ALWAYS_EXPLAIN.open ? ROBOT_ALWAYS_EXPLAIN.close : ROBOT_ALWAYS_EXPLAIN.open
-//     })
-//     getRobotList()
-//     message.success('设置讲解常驻成功')
-//   } catch (error) {
-//     message.error(`设置讲解常驻失败，原因是:${error.message}`)
-//   }
-// }
-/******************************** E 机器人设置讲解常驻业务逻辑 ***********************************/
-
 /******************************** S 删除机器人的业务逻辑 ***********************************/
   /**
    * @function stopRobot 删除机器人
    */
   const deleteRobot = async (id: string) => {
+    const hide = message.loading('删除中...', 0)
     try {
       await deleteRobotServer({
         id
       })
       getRobotList()
+      hide()
       message.success('删除成功')
     } catch (error) {
+      hide()
       message.error(`删除失败，原因是:${error.message}`)
     }
   }

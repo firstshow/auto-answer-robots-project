@@ -64,15 +64,17 @@ import { STORAGE_KEY, ROUTE_MAP } from '@/constants'
    * 注册
    */
    const register = async () => {
+    const hide = message.loading('注册中...', 0)
     try {
       let resData = await registerServer({
         username: formState.username,
         password: formState.password,
         scenario: 'defaultRegister' // 注册场景
       })
+      hide()
       handleLoginSuccess(resData)
     } catch (error) {
-      message.info(`注册且登录失败，${error.message}`)
+      message.info(`注册失败，${error.message}`)
     }
   }
 
@@ -80,14 +82,17 @@ import { STORAGE_KEY, ROUTE_MAP } from '@/constants'
    * 登录
    */
   const login = async () => {
+    const hide = message.loading('登录中...', 0)
     try {
       let resData = await loginServer({
         username: formState.username,
         password: formState.password,
         scenario: 'defaultLogin' // 登录场景
       })
+      hide()
       handleLoginSuccess(resData)
     } catch (error) {
+      hide()
       if (error.message === '用户不存在') {
         handleNewUser()
       } else {

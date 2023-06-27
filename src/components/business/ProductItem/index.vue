@@ -28,10 +28,10 @@
           </p>
         </div>
         <div class="x-product-info-action flex justify-right items-center">
-          <i class="x-flash-killing-icon" @click="getFlashKillingInfo" v-if="productItem.hasFlashKilling">
+          <i class="x-flash-killing-icon" @click="getFlashKillingInfo" v-show="productItem.hasFlashKilling">
             <svg-icon name="IconFlashKilling" size="14"/>
           </i>
-          <a-button class="x-explain-btn" type="default" @click="setAlwaysExplain()">{{ productItem.permanentOpen === PERMANENT_TYPE.open ? '取消常驻' : '讲解常驻' }}</a-button>
+          <a-button class="x-explain-btn" type="default" @click="setAlwaysExplain()">{{ productItem.permanentOpen === PERMANENT_TYPE.open ? '取消讲解' : '一直讲解' }}</a-button>
         </div>
       </div>
     </div>
@@ -76,15 +76,12 @@
   import { message } from 'ant-design-vue'
   import { PERMANENT_TYPE } from '@/constants'
   import { 
-    // explainProductServer,
     setRobotAlwaysExplainServer,
     setRobotExplainServer,
     getFlashKillingInfoServer,
     setFlashKillingServer,
     OffShelfServer
   } from '@/api'
-
-  // const emit = defineEmits(['back'])
 
   const emit = defineEmits(['updateFlashKilling'])
 
@@ -144,10 +141,10 @@
    * @param percent 当前进度
    */
   const setProgressText = (percent) => {
-    if (percent > 0) {
+    if (percent > 0 && props.productItem.flash_sale.end_time && props.currentTimestamp) {
       return showTime(props.productItem.flash_sale.end_time - props.currentTimestamp)
     }
-    emit('updateFlashKilling')
+    // emit('updateFlashKilling')
     return '00:00:00'
   }
   /******************************** S 秒杀进度条逻辑 ***********************************/
@@ -182,7 +179,7 @@
       hide()
     } catch (error) {
       hide()
-      console.log('获取秒杀信息失败', error)
+      message.error(`获取秒杀信息失败:${error.message}`)
     }
   }
 
@@ -204,6 +201,7 @@
         assistant_id: props.productItem.assistantId, // 助手ID
         count_down_seconds: 0,
         count_down_switch: false,
+        component_id: props.productItem.groupon_id,
         coupon_id: props.productItem.couponId,
         draw_rule: {
           rule_name: "",
@@ -222,14 +220,14 @@
         "seckill_loop": loop ? 1 : 0,
         "time_interval": duration*60
       })
-      message.info('设置成功')
+      message.success('设置成功')
       emit('updateFlashKilling')
       isShowFlashKillingModal.value = false
       hide()
     } catch (error) {
       isShowFlashKillingModal.value = false
       hide()
-      message.error(`设置失败，${error.message}`)
+      message.error(`设置秒杀失败，${error.message}`)
     }
   }
 
@@ -237,7 +235,6 @@
    * @function 秒杀上下架
    * */
    const offShelf = async () => {
-    const hide = message.loading('下架中...', 0)
     try {
       let resData = await OffShelfServer({
         assignRecordId: props.productItem.recordId,
@@ -245,34 +242,34 @@
         couponId: props.productItem.couponId
       })
       emit('updateFlashKilling')
-      hide()
-      message.info('下架成功')
+      message.success('秒杀下架成功')
       console.log(resData)
     } catch (error) {
-      hide()
-      message.info(`下架失败，${error.message}`)
+      message.error(`秒杀下架失败，${error.message}`)
       console.log('设置讲解失败')
     }
   }
-
 
   /******************************** E 秒杀逻辑区域 ***********************************/
 
   /******************************** S 讲解逻辑区域 ***********************************/
   /**
-   * @function 商品一直讲解
+   * @function 商品讲解
    * @param operationd // 3讲解，4取消讲解
    */
    const explain = async (operation: number) => {
+    const hide = message.loading('设置中...', 0)
     try {
       let resData = await setRobotExplainServer({
         cardId: props.productItem.id,
         assistantId: props.productItem.assistantId,
         operation
       })
+      hide()
       console.log(resData)
     } catch (error) {
-      console.log('设置讲解失败')
+      hide()
+      message.error(`设置讲解失败:${error.message}`)
     }
   }
   /**
@@ -280,6 +277,7 @@
    * @param id 商品id
    */
    const alwaysExplain = async () => {
+    const hide = message.loading('设置中...', 0)
     try {
       let resData = await setRobotAlwaysExplainServer({
         cardId: props.productItem.id,
@@ -287,9 +285,12 @@
         open: props.productItem.permanentOpen === PERMANENT_TYPE.open ? PERMANENT_TYPE.close : PERMANENT_TYPE.open
       })
       emit('updateFlashKilling')
+      hide()
+      message.success('设置成功')
       console.log(resData)
     } catch (error) {
-      console.log('设置讲解失败')
+      hide()
+      message.error(`设置一直讲解失败:${error.message}`)
     }
   }
 
