@@ -46,6 +46,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: ''
     }
+  },
+  {
+    path: '/textControl',
+    name: 'textControl',
+    component: () => import('@/views/RobotList/TextControl/index.vue'),
+    meta: {
+      title: ''
+    }
   }
 ]
 

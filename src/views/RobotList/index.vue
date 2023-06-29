@@ -75,12 +75,17 @@
               </a-popconfirm> -->
               <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="productManage(record.id)">商品管理</a>
               <a-divider type="vertical"/>
-               <!-- E 开启讲解常驻 -->
+              <!-- E 开启讲解常驻 -->
 
-               <!-- S 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
+              <!-- S 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
               <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="robotDataStatistics(record.id)">直播数据</a>
               <a-divider type="vertical" />
               <!-- E 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
+
+              <!-- S 直播间文字场控 -->
+              <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="textControl(record.id)">文字场控</a>
+              <a-divider type="vertical" />
+              <!-- E 直播间文字场控 -->
 
               <!-- S 修改 -->
               <a class="x-action-btn" v-if="record.status !== ROBOT_STATUS_VAL.expired" @click="editRobot(record.id)">修改</a>
@@ -320,6 +325,15 @@ const editRobot = (id: string) => {
  */
  const robotDataStatistics = (id: string) => {
   routeChange(ROUTE_MAP.RobotDataStatistics, {
+    id
+  })
+}
+
+/**
+ * @function textControl 文字场控
+ */
+const textControl = (id: string) => {
+  routeChange(ROUTE_MAP.TextControl, {
     id
   })
 }

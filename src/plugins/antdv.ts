@@ -1,4 +1,4 @@
-import { Button, Table, Badge, Form, Input, Textarea, List, Row, Col, Popconfirm, Dropdown, Menu, MenuItem, Modal, Image, InputNumber, Checkbox, Progress } from 'ant-design-vue';
+import { Button, Table, Badge, Form, Input, Textarea, List, Row, Col, Popconfirm, Dropdown, Menu, MenuItem, Modal, Image, InputNumber, Checkbox, Progress, RadioGroup, RadioButton, Radio, Select } from 'ant-design-vue';
 
 function useComponent(app: any) {
     app
@@ -20,6 +20,10 @@ function useComponent(app: any) {
     .use(InputNumber)
     .use(Checkbox)
     .use(Progress)
+    .use(Radio)
+    .use(RadioGroup)
+    .use(RadioButton)
+    .use(Select)
 }
 
 export default useComponent
