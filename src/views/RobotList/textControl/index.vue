@@ -96,6 +96,7 @@ let data = reactive({
  * @function 获取场控话术详情
  */
 const getTextControlDetail = async () => {
+  const hide = message.loading('加载中...', 0)
   try {
     let resData = await getTextControlDetailServer({ 
       id: router.query.id as string 
@@ -116,8 +117,10 @@ const getTextControlDetail = async () => {
         })
       })
     }
+    hide()
     console.log(resData)
   } catch (error) {
+    hide()
     message.error(`获取场控话术详情失败：${error.message}`)
   }
 }
@@ -126,6 +129,7 @@ const getTextControlDetail = async () => {
  * @function 获取场控话术详情
  */
  const setTextControlDetail = async () => {
+  const hide = message.loading('设置中...', 0)
   try {
     let {
       id,
@@ -146,12 +150,14 @@ const getTextControlDetail = async () => {
       textFrequency,
       textControlOpen
     })
+    hide()
     message.success(`设置场控话术成功`)
     setTimeout(() => {
       back()
     }, 2000);
     console.log(resData)
   } catch (error) {
+    hide()
     message.error(`设置场控话术失败：${error.message}`)
   }
 }
