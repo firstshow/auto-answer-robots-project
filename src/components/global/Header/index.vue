@@ -26,7 +26,7 @@
 <script lang="ts" setup>
   import { getLocalStorage, removeLocalStorage } from '@/hooks/storage'
   import { STORAGE_KEY } from '@/constants/common'
-  import { routeReplaceChange } from "@/hooks/routeChange"
+  import { routeChange } from "@/hooks/routeChange"
   import { ref, onMounted } from 'vue'
   import { ROUTE_MAP } from '@/constants'
 
@@ -74,9 +74,7 @@
   const logout = () => {
     console.log('退出登录')
     removeLocalStorage(STORAGE_KEY.userInfo)
-    setTimeout(() => {
-      routeReplaceChange(ROUTE_MAP.Login)
-    }, 2000)
+    routeChange(ROUTE_MAP.Login)
   }
 
   onMounted(()=>{

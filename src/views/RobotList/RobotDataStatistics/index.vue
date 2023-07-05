@@ -1,8 +1,6 @@
 <template>
   <root-page class="flex flex-col items-center">
-    <div class="x-statistics-box">
-      <x-header @back="back" />
-    </div>
+    <x-header @back="back" />
     
     <!-- S 直播间信息 -->
     <div class="x-room-info-box flex justify-center items-center">

@@ -8,4 +8,5 @@ export const ROUTE_MAP = {
     CreateRobot: 'createRobot',
     RobotDataStatistics: 'robotDataStatistics',
     ProductManage: 'productManage',
+    TextControl: 'textControl'
   }

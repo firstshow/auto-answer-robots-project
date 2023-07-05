@@ -235,3 +235,33 @@ export function getFlashKillingConfigServer(data: API.GetFlashKillingConfigParam
     noToken: true
   })
 }
+
+/**
+ * @api 获取秒杀配置
+ * @param data 
+ * @returns 
+ */
+export function getTextControlDetailServer(data: API.GetTextControlDetailParams) {
+  return request<API.resResult<API.GetTextControlDetailData>>({
+    url: '/api/ltk/ltkAssistant-api/textControlDetail',
+    data,
+    method: 'GET',
+    noToken: true
+  })
+}
+
+/**
+ * @api 获取秒杀配置
+ * @param data 
+ * @returns 
+ */
+export function setTextControlDetailServer(data: API.SetTextControlDetailParams) {
+  return request<API.resResult<string>>({
+    url: '/api/ltk/ltkAssistant-api/textControlEdit',
+    data,
+    method: 'POST',
+    noToken: true
+  })
+}
+
+

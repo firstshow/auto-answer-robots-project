@@ -269,5 +269,34 @@ declare namespace API {
       [string]: string
     }
    }
+
+   /**
+    * @type 获取文本控制入参
+    */
+   type GetTextControlDetailParams = {
+    id: string // 助手ID
+   }
+
+   /**
+    * @type 获取文本控制出参
+    */
+   type GetTextControlDetailData = {
+    id: string
+    contentList: [],
+    textControlOpen: number
+    textFrequency: string
+    textOrder: string
+  }
+
+  /**
+   * @type 设置文本控制入参
+   */
+  type SetTextControlDetailParams = {
+    id: string
+    contentList: any[],
+    textControlOpen: number
+    textFrequency: string
+    textOrder: string
+  }
 }
 

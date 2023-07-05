@@ -27,10 +27,7 @@
         </template>
 
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'name'">
-            <span> {{ record.name }}</span>
-          </template>
-          <template v-else-if="column.key === 'updateTime'">
+          <template v-if="column.key === 'updateTime'">
             <span> {{ record.updateTime || '- -' }}</span>
           </template>
           <template v-else-if="column.key === 'status'">
@@ -75,12 +72,22 @@
               </a-popconfirm> -->
               <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="productManage(record.id)">商品管理</a>
               <a-divider type="vertical"/>
-               <!-- E 开启讲解常驻 -->
+              <!-- E 开启讲解常驻 -->
 
-               <!-- S 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
+              <!-- S 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
               <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="robotDataStatistics(record.id)">直播数据</a>
               <a-divider type="vertical" />
               <!-- E 直播间数据，只有在直播的直播间才有，是当前直播间的实时数据 -->
+
+              <!-- S 直播间文字场控 -->
+              <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="textControl(record.id)">文字场控</a>
+              <a-divider type="vertical" />
+              <!-- E 直播间文字场控 -->
+
+              <!-- S 直播间文字场控 -->
+              <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="copyAndCreateRobot(record.id)">复制创建</a>
+              <a-divider type="vertical" />
+              <!-- E 直播间文字场控 -->
 
               <!-- S 修改 -->
               <a class="x-action-btn" v-if="record.status !== ROBOT_STATUS_VAL.expired" @click="editRobot(record.id)">修改</a>
@@ -140,10 +147,10 @@
 
   const columns = [
   {
-    name: '助手名称',
-    dataIndex: 'name',
-    key: 'name',
-    width: 80
+    title: '直播间ID',
+    dataIndex: 'roomId',
+    key: 'roomId',
+    width: 120
   },
   {
     title: '直播抖音昵称',
@@ -152,13 +159,7 @@
     width: 120
   },
   {
-    title: '直播间ID',
-    dataIndex: 'roomId',
-    key: 'roomId',
-    width: 120
-  },
-  {
-    title: '门店',
+    title: '门店名称',
     dataIndex: 'storeName',
     key: 'storeName',
     width: 150
@@ -241,7 +242,8 @@ const ROBOT_STATUS = {
     total: 0, // 列表总条数
     currentOptionText: '创建', // 当前是续费操作，还是创建操作；弹框的提示标题文案
     currentRenewRobotId: '', // 当前需要续期的机器人ID
-    code: '' // 续费的激活码
+    code: '', // 续费的激活码
+    copyAndCreateRobotId: '', // 复制并创建机器人的id
   })
 
 /**
@@ -270,6 +272,15 @@ defineProps({
 const createRobot = () => {
   data.currentOptionText = '创建'
   isShowCodeModal.value = true
+}
+
+/**
+ * @function 复制并创建机器人
+ */
+const copyAndCreateRobot = (id) => {
+  data.currentOptionText = '创建'
+  isShowCodeModal.value = true
+  data.copyAndCreateRobotId = id
 }
 
 /**
@@ -314,12 +325,23 @@ const editRobot = (id: string) => {
 }
 
 
+
+
 /**
  * @function editRobot 编辑机器人
  * @param id 机器人id
  */
  const robotDataStatistics = (id: string) => {
   routeChange(ROUTE_MAP.RobotDataStatistics, {
+    id
+  })
+}
+
+/**
+ * @function textControl 文字场控
+ */
+const textControl = (id: string) => {
+  routeChange(ROUTE_MAP.TextControl, {
     id
   })
 }
@@ -385,12 +407,12 @@ const openRenewModal = (id: string) => {
  * @function 处理激活码弹框逻辑，续费则是续费；不然是创建
  */
 const handleCode = () => {
-
   if (data.currentOptionText === '续费') {
       renew()
     } else {
       routeChange(ROUTE_MAP.CreateRobot, {
-      code: data.code
+      code: data.code,
+      copyAndCreateRobotId: data.copyAndCreateRobotId
     })
   }
 }
