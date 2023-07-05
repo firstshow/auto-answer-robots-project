@@ -27,10 +27,7 @@
         </template>
 
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'name'">
-            <span> {{ record.name }}</span>
-          </template>
-          <template v-else-if="column.key === 'updateTime'">
+          <template v-if="column.key === 'updateTime'">
             <span> {{ record.updateTime || '- -' }}</span>
           </template>
           <template v-else-if="column.key === 'status'">
@@ -145,10 +142,10 @@
 
   const columns = [
   {
-    name: '助手名称',
-    dataIndex: 'name',
-    key: 'name',
-    width: 80
+    title: '直播间ID',
+    dataIndex: 'roomId',
+    key: 'roomId',
+    width: 120
   },
   {
     title: '直播抖音昵称',
@@ -157,13 +154,7 @@
     width: 120
   },
   {
-    title: '直播间ID',
-    dataIndex: 'roomId',
-    key: 'roomId',
-    width: 120
-  },
-  {
-    title: '门店',
+    title: '门店名称',
     dataIndex: 'storeName',
     key: 'storeName',
     width: 150

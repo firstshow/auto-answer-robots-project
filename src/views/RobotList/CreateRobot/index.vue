@@ -2,24 +2,18 @@
   <root-page class="x-create-robot-page-box flex flex-col items-center">
     <x-header @back="back" />
     <p class="x-draft-tips flex items-center justify-left" v-if="draftData.isShowDraftTips">
-      <svg-icon class="cursor-pointer margin-right-6" name="IconClear" size="14" @click="draftData.isShowDraftTips = false"/>
+      <svg-icon class="cursor-pointer margin-right-6" name="IconClear" size="14" @click="clearAndClose"/>
       您本地有一份存储于{{draftData.setTime}}的一份草稿，是否<span class="x-use-btn" @click="useDraft">使用</span>该草稿? 
     </p>
     <a-form class="x-from-box" :rules="rules" ref="formRef" :model="formState" @finish="saveRobot">
-      <a-form-item label="助手名称" name="name">
-        <a-input class="x-from-input" v-model:value="formState.name" placeholder="请输入助手名称" />
-      </a-form-item>
       <a-form-item label="门店名称" name="storeName">
-        <a-input class="x-from-input" v-model:value="formState.storeName" placeholder="请输入门店名称" />
+        <a-input class="x-from-input" v-model:value="formState.storeName" placeholder="请输入门店名称" maxlength="20" />
       </a-form-item>
       <a-form-item label="门店地址" name="storeAddress">
-        <a-input class="x-from-input" v-model:value="formState.storeAddress" placeholder="请输入门店地址" />
-      </a-form-item>
-      <a-form-item label="所属行业" name="industry">
-        <a-input class="x-from-input" v-model:value="formState.industry" placeholder="请输入所属行业" />
+        <a-input class="x-from-input" v-model:value="formState.storeAddress" placeholder="请输入门店地址" maxlength="30" />
       </a-form-item>
       <a-form-item label="营业时间" name="businessTime">
-        <a-input class="x-from-input" v-model:value="formState.businessTime" placeholder="请输入所属行业" />
+        <a-input class="x-from-input" v-model:value="formState.businessTime" placeholder="请输入营业时间" maxlength="30" />
       </a-form-item>
       <a-form-item label="套餐描述" name="packageList">
         <a-list class="x-from-input" size="small" bordered :data-source="formState.packageList">
@@ -43,17 +37,17 @@
               </a-col>
               <a-col class="x-list-input-box" :span="7">
                 <a-form-item-rest>
-                  <a-input class="x-list-input" v-model:value="item.title" placeholder="请输入套餐标题" />
+                  <a-input class="x-list-input" v-model:value="item.title" placeholder="请输入套餐标题" maxlength="20" />
                 </a-form-item-rest>
               </a-col>
               <a-col class="x-list-input-box" flex :span="4">
                 <a-form-item-rest>
-                  <a-input class="x-list-input" v-model:value="item.price" placeholder="请输入价格" />
+                  <a-input class="x-list-input" v-model:value="item.price" placeholder="请输入价格" maxlength="10" />
                 </a-form-item-rest>
               </a-col>
               <a-col class="x-list-input-box" flex :span="10">
                 <a-form-item-rest>
-                  <a-textarea class="x-list-textarea" v-model:value="item.description" placeholder="请输入套餐描述" />
+                  <a-textarea class="x-list-textarea" v-model:value="item.description" placeholder="请输入套餐描述，最多100字" maxlength="100" />
                 </a-form-item-rest>
               </a-col>
               <a-col class="x-list-input-box cursor-pointer" :span="1" :offset="1" @click="reduceGoods(index)">
@@ -63,9 +57,13 @@
           </template>
         </a-list>
       </a-form-item>
-      <a-form-item label="套餐限制" name="packageLimit">
+      <a-form-item label="通用规则" name="packageLimit">
         <a-textarea class="x-from-textarea" v-model:value="formState.packageLimit"
-          placeholder="请输入通用套餐限制，如：所有票都需要提前一天购买，不需要预约；" />
+          placeholder="请输入通用套餐规则，最多150字，如：所有票都需要提前一天购买，不需要预约；" maxlength="150" />
+      </a-form-item>
+      <a-form-item label="其他信息" name="note">
+        <a-textarea class="x-from-textarea" v-model:value="formState.note"
+          placeholder="请输入其他信息，最多150字，如：是否免费停车，免票或儿童票信息，周末节假日是否可用"  maxlength="150" />
       </a-form-item>
       <a-form-item label="关键词汇">
         <a-list class="x-from-input" size="small" bordered :data-source="formState.keywordList" style="background: fff; ">
@@ -82,12 +80,12 @@
             <a-row class="x-list-content-box">
               <a-col class="x-list-input-box" :span="8">
                 <a-form-item-rest>
-                  <a-input class="x-list-input" v-model:value="item.keyword" placeholder="请输入关键词" />
+                  <a-input class="x-list-input" v-model:value="item.keyword" placeholder="请输入关键词，最多30字"  maxlength="30" />
                 </a-form-item-rest>
               </a-col>
               <a-col class="x-list-input-box" flex :span="14">
                 <a-form-item-rest>
-                  <a-textarea class="x-list-textarea" v-model:value="item.reply" placeholder="请输入回复内容" />
+                  <a-textarea class="x-list-textarea" v-model:value="item.reply" placeholder="请输入回复内容，最多100字" maxlength="100" />
                 </a-form-item-rest>
               </a-col>
               <a-col class="x-list-input-box cursor-pointer" :span="1" :offset="1" @click="reduceKeyword(index)">
@@ -96,10 +94,6 @@
             </a-row>
           </template>
         </a-list>
-      </a-form-item>
-      <a-form-item label="其他信息" name="note">
-        <a-textarea class="x-from-textarea" v-model:value="formState.note"
-          placeholder="请输入其他信息。如：是否免费停车，免票或儿童票信息，周末节假日是否可用" />
       </a-form-item>
 
       <a-form-item label="">
@@ -129,10 +123,10 @@ let setDraftTimer = null // 存储草稿定时器
 
 let formState = reactive({
   code: router.query.code, // 激活码
-  name: '', // 助手名称
+  name: 'dolphin', // 助手名称
   storeName: '', // 门店名称
   storeAddress: '', // 门店地址
-  industry: '', // 所属行业
+  industry: 'all', // 所属行业
   businessTime: '', // 营业时间
   packageList: [ // 套餐描述列表
     {
@@ -165,10 +159,8 @@ let draftData = reactive({
  * @function rules 表单验证规则
  */
 const rules = {
-  name: [{ required: true, message: '请输入助手名称' }],
   storeName: [{ required: true, message: '请输入门店名称' }],
   storeAddress: [{ required: true, message: '请输入门店地址' }],
-  industry: [{ required: true, message: '请输入所属行业' }],
   businessTime: [{ required: true, message: '请输入营业时间' }],
   packageLimit: [{ required: false, message: '请输入套餐限制' }],
   note: [{ required: false, message: '请输入其他信息' }],
@@ -317,6 +309,14 @@ const upMove = (index: number) => {
 const reduceKeyword = (idx) => {
   if (formState.keywordList.length === 1) return;
   formState.keywordList.splice(idx, 1);
+}
+
+/**
+ * @function clearAndClose 清除草稿并关闭提示
+ */
+const clearAndClose = () => {
+  draftData.isShowDraftTips = false
+  clearDraft(DRAFT_TYPE.editRobotDraft)
 }
 
 /**
