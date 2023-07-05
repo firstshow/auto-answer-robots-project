@@ -84,6 +84,11 @@
               <a-divider type="vertical" />
               <!-- E 直播间文字场控 -->
 
+              <!-- S 直播间文字场控 -->
+              <a class="x-action-btn" v-if="record.status === ROBOT_STATUS_VAL.inUse" @click="copyAndCreateRobot(record.id)">复制创建</a>
+              <a-divider type="vertical" />
+              <!-- E 直播间文字场控 -->
+
               <!-- S 修改 -->
               <a class="x-action-btn" v-if="record.status !== ROBOT_STATUS_VAL.expired" @click="editRobot(record.id)">修改</a>
               <a-divider type="vertical" />
@@ -237,7 +242,8 @@ const ROBOT_STATUS = {
     total: 0, // 列表总条数
     currentOptionText: '创建', // 当前是续费操作，还是创建操作；弹框的提示标题文案
     currentRenewRobotId: '', // 当前需要续期的机器人ID
-    code: '' // 续费的激活码
+    code: '', // 续费的激活码
+    copyAndCreateRobotId: '', // 复制并创建机器人的id
   })
 
 /**
@@ -266,6 +272,15 @@ defineProps({
 const createRobot = () => {
   data.currentOptionText = '创建'
   isShowCodeModal.value = true
+}
+
+/**
+ * @function 复制并创建机器人
+ */
+const copyAndCreateRobot = (id) => {
+  data.currentOptionText = '创建'
+  isShowCodeModal.value = true
+  data.copyAndCreateRobotId = id
 }
 
 /**
@@ -308,6 +323,8 @@ const editRobot = (id: string) => {
     id
   })
 }
+
+
 
 
 /**
@@ -390,12 +407,12 @@ const openRenewModal = (id: string) => {
  * @function 处理激活码弹框逻辑，续费则是续费；不然是创建
  */
 const handleCode = () => {
-
   if (data.currentOptionText === '续费') {
       renew()
     } else {
       routeChange(ROUTE_MAP.CreateRobot, {
-      code: data.code
+      code: data.code,
+      copyAndCreateRobotId: data.copyAndCreateRobotId
     })
   }
 }

@@ -74,9 +74,7 @@
   const logout = () => {
     console.log('退出登录')
     removeLocalStorage(STORAGE_KEY.userInfo)
-    setTimeout(() => {
-      routeChange(ROUTE_MAP.Login)
-    }, 2000)
+    routeChange(ROUTE_MAP.Login)
   }
 
   onMounted(()=>{

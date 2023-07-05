@@ -222,12 +222,16 @@ const useDraft = () => {
 const getRobotDetail = async () => {
   console.log('getRobotDetail')
   let id = router.query.id as string
-  if (!id) {
+  let copyAndCreateRobotId = router.query.copyAndCreateRobotId as string
+  if (!id && !copyAndCreateRobotId) {
     return false
   }
+  id = id || copyAndCreateRobotId
   const hide = message.loading('加载中...', 0)
   try {
-    let resData = await getRobotDetailServer({ id })
+    let resData = await getRobotDetailServer({ 
+      id
+    })
     let {
       name,
       storeName,
@@ -334,7 +338,7 @@ const back = () => {
  */
 const saveRobot = async () => {
   let id = router.query.id as string
-  // 如果有id，则是编辑；没有id是新增
+  // 如果有id或者copyAndCreateRobotId，则是编辑；没有id是新增
   let handleRobotFun = !id ? addRobotServer : editRobotServer
   let {
     code,
